@@ -1,0 +1,31 @@
+# DevTools — Free Online Developer Utilities
+
+> A suite of 21+ free, privacy-first developer tools. All processing happens client-side — no data is ever sent to a server.
+
+## Tools
+
+- /json — JSON Parser & Formatter: Parse, format, minify, and explore JSON with intelligent auto-fix for malformed input.
+- /xml — XML Formatter: Format, validate, and explore XML documents with structure analysis.
+- /sql-formatter — SQL Formatter: Format and beautify SQL queries with dialect-aware indentation.
+- /graphql — GraphQL Formatter: Format GraphQL queries and explore SDL schemas with type inspection.
+- /csv-json — CSV ↔ JSON Converter: Convert between CSV and JSON with smart delimiter detection and type inference.
+- /yaml-json — YAML ↔ JSON Converter: Convert between YAML and JSON with round-trip validation and anchor resolution.
+- /base64 — Base64 Encode/Decode: Encode and decode Base64 for text and files with auto-detection.
+- /jwt — JWT Decoder: Decode and inspect JSON Web Tokens with claim analysis and expiry checking.
+- /url — URL Encode/Decode: Encode, decode, and parse URLs with query string inspection and builder.
+- /hash — Hash Generator: Generate MD5, SHA-1, SHA-256, SHA-384, SHA-512 hashes for text and files.
+- /regex — Regex Tester: Test regular expressions with live highlighting, group capture, and pattern library.
+- /cron — CRON Builder: Build and decode cron expressions with visual editor and next-run preview.
+- /http-status — HTTP Status Codes: Quick reference for all HTTP status codes with descriptions and common causes.
+- /epoch — Epoch Converter: Convert between Unix timestamps and human-readable dates across timezones.
+- /uuid — UUID Generator: Generate UUIDv4, UUIDv7, and ULID with bulk generation and format options.
+- /color — Color Converter: Convert between color formats (HEX, RGB, HSL, Lab, Oklch) with palette generator and contrast checker.
+- /env — Env Var Manager: Manage environment variables across projects with import, export, and comparison.
+- /json-diff — JSON Diff Viewer: Deep diff two JSON objects with tree visualization and JSON Patch output.
+- /diff — Text Diff Viewer: Compare two text files with unified or side-by-side diff view.
+- /sql-visualizer — SQL Visualizer: AI-powered SQL analysis with join graphs, data flow diagrams, and plain-English explanations.
+- /mock-api — Mock API Generator: Generate realistic mock API responses from schemas or descriptions using AI.
+
+## Privacy
+
+All data processing happens entirely in your browser. No data is transmitted to any server. Tools that use AI (SQL Visualizer, Mock API Generator) connect directly to the Anthropic API using your own API key.
