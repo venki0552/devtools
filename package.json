@@ -1,7 +1,37 @@
 {
   "name": "devtools",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A comprehensive suite of 21 developer utilities — entirely client-side, no backend, no tracking.",
+  "author": "venki0552",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/venki0552/devtools.git"
+  },
+  "homepage": "https://github.com/venki0552/devtools#readme",
+  "bugs": {
+    "url": "https://github.com/venki0552/devtools/issues"
+  },
+  "keywords": [
+    "devtools",
+    "developer-tools",
+    "json-formatter",
+    "base64",
+    "jwt-decoder",
+    "uuid-generator",
+    "regex-tester",
+    "sql-formatter",
+    "color-converter",
+    "hash-generator",
+    "epoch-converter",
+    "yaml-json",
+    "csv-json",
+    "url-encoder",
+    "cron-builder",
+    "graphql-formatter",
+    "text-diff",
+    "json-diff"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
