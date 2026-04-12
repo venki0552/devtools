@@ -1,4 +1,4 @@
-import { Moon, Sun, ExternalLink } from "lucide-react";
+import { Moon, Sun, Github } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
 interface TopBarProps {
@@ -13,13 +13,13 @@ export function TopBar({ title = "DevTools" }: TopBarProps) {
 			<h1 className='text-sm font-semibold truncate'>{title}</h1>
 			<div className='flex items-center gap-2'>
 				<a
-					href='https://github.com'
+					href='https://github.com/venki0552/devtools'
 					target='_blank'
 					rel='noopener noreferrer'
 					className='flex h-8 w-8 items-center justify-center rounded-md text-muted hover:text-foreground transition-colors'
 					aria-label='GitHub repository'
 				>
-					<ExternalLink className='h-4 w-4' />
+					<Github className='h-4 w-4' />
 				</a>
 				<button
 					onClick={toggleTheme}

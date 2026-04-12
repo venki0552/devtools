@@ -17,7 +17,10 @@ describe("TopBar", () => {
 	it("has GitHub link", () => {
 		renderWithProviders(<TopBar />);
 		const link = screen.getByLabelText("GitHub repository");
-		expect(link).toHaveAttribute("href", "https://github.com");
+		expect(link).toHaveAttribute(
+			"href",
+			"https://github.com/venki0552/devtools",
+		);
 		expect(link).toHaveAttribute("target", "_blank");
 		expect(link).toHaveAttribute("rel", "noopener noreferrer");
 	});
