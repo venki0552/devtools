@@ -309,8 +309,8 @@ function parseUrl(input: string): {
 		if (/xn--/.test(hostForIDN)) {
 			idnPunycode = hostForIDN;
 			idnUnicode = idnToUnicode(hostForIDN);
+			// eslint-disable-next-line no-control-regex
 		} else if (/[^\x00-\x7F]/.test(hostForIDN)) {
-			// eslint-disable-line no-control-regex
 			idnUnicode = hostForIDN;
 			idnPunycode = idnToAscii(hostForIDN);
 		}
