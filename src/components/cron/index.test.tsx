@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { act } from "react";
 import { renderWithProviders } from "@/test/utils";
 import { CronTool } from "./index";
@@ -145,14 +145,16 @@ describe("CronTool", () => {
 		expect(fieldLabels.length).toBe(10); // 5 in builder + 5 under expression
 	});
 
-	it("empty cron input shows no description or runs", () => {
+	it("empty cron input shows no description or runs", async () => {
+		vi.useRealTimers();
 		renderWithProviders(<CronTool />);
-		typeCron("");
-		// humanReadable should be null for empty input
-		// nextRuns should be empty
-		// The 'Next 10 Runs' section only renders when nextRuns.length > 0
-		const nextRunsHeading = screen.queryByText("Next 10 Runs");
-		// If it still shows due to initial state, that's OK. Check no human readable
-		expect(nextRunsHeading).toBeFalsy();
+		const input = screen.getByLabelText("Cron expression");
+		fireEvent.change(input, { target: { value: "" } });
+		await waitFor(
+			() => {
+				expect(screen.queryByText("Next 10 Runs")).not.toBeInTheDocument();
+			},
+			{ timeout: 500 },
+		);
 	});
 });

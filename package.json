@@ -9,6 +9,9 @@
     "url": "https://github.com/venki0552/devtools.git"
   },
   "homepage": "https://github.com/venki0552/devtools#readme",
+  "engines": {
+    "node": ">=20.12.0"
+  },
   "bugs": {
     "url": "https://github.com/venki0552/devtools/issues"
   },

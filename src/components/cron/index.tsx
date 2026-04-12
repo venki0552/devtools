@@ -852,21 +852,25 @@ export function CronTool() {
 		() => validateCron(debouncedInput, format),
 		[debouncedInput, format],
 	);
+	const isEmpty = !debouncedInput.trim();
 	const humanReadable = useMemo(
-		() => (error ? null : getHumanReadable(debouncedInput.trim(), format)),
-		[debouncedInput, error, format],
+		() =>
+			error || isEmpty ? null : getHumanReadable(debouncedInput.trim(), format),
+		[debouncedInput, error, isEmpty, format],
 	);
 	const nextRuns = useMemo(
 		() =>
-			error ? [] : getNextRuns(debouncedInput.trim(), 10, timezone, format),
-		[debouncedInput, error, timezone, format],
+			error || isEmpty
+				? []
+				: getNextRuns(debouncedInput.trim(), 10, timezone, format),
+		[debouncedInput, error, isEmpty, timezone, format],
 	);
 	const runStats = useMemo(
 		() =>
-			error
+			error || isEmpty
 				? null
 				: computeRunStatistics(debouncedInput.trim(), timezone, format),
-		[debouncedInput, error, timezone, format],
+		[debouncedInput, error, isEmpty, timezone, format],
 	);
 	const dateWarnings = useMemo(
 		() => getDateWarnings(fields, format),
