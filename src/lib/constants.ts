@@ -38,7 +38,6 @@ export type ToolCategory =
   | 'Encoders & Decoders'
   | 'Generators & Inspectors'
   | 'Viewers & Comparators'
-  | 'AI-Powered'
 
 export const TOOL_CATEGORIES: ToolCategory[] = [
   'Formatters',
@@ -46,7 +45,6 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   'Encoders & Decoders',
   'Generators & Inspectors',
   'Viewers & Comparators',
-  'AI-Powered',
 ]
 
 export const TOOLS: Tool[] = [
@@ -226,23 +224,23 @@ export const TOOLS: Tool[] = [
     category: 'Viewers & Comparators',
     keywords: ['diff', 'compare', 'text', 'merge', 'patch', 'unified'],
   },
-  // AI-Powered
+  // Generators & Inspectors (SQL & Mock)
   {
     id: 'sql-visualizer',
     name: 'SQL Visualizer',
-    description: 'AI-powered SQL analysis with join graphs, data flow diagrams, and plain-English explanations.',
+    description: 'Client-side SQL analysis with join graphs, data flow diagrams, and plain-English explanations.',
     route: '/sql-visualizer',
     icon: Database,
-    category: 'AI-Powered',
-    keywords: ['sql', 'visualize', 'ai', 'join', 'explain', 'diagram', 'analyze'],
+    category: 'Generators & Inspectors',
+    keywords: ['sql', 'visualize', 'join', 'explain', 'diagram', 'analyze'],
   },
   {
     id: 'mock-api',
     name: 'Mock API Generator',
-    description: 'Generate realistic mock API responses from schemas or descriptions using AI.',
+    description: 'Generate realistic mock API responses from schemas or descriptions.',
     route: '/mock-api',
     icon: Server,
-    category: 'AI-Powered',
+    category: 'Generators & Inspectors',
     keywords: ['mock', 'api', 'fake', 'data', 'generate', 'schema', 'faker'],
   },
 ]

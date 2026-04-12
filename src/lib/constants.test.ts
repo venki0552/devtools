@@ -37,7 +37,6 @@ describe('TOOL_CATEGORIES', () => {
       'Encoders & Decoders',
       'Generators & Inspectors',
       'Viewers & Comparators',
-      'AI-Powered',
     ])
   })
 })

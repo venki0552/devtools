@@ -1,14 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import {
-	Server,
-	Loader2,
-	Key,
-	ShieldCheck,
-	X,
-	RefreshCw,
-	AlertTriangle,
-} from "lucide-react";
+import { Server, RefreshCw } from "lucide-react";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { cn } from "@/lib/utils";
@@ -16,6 +8,7 @@ import { ToolPageHeader } from "@/components/shared/ToolPageHeader";
 import { CopyButton } from "@/components/shared/CopyButton";
 import { ErrorBox } from "@/components/shared/ErrorBox";
 import { MonacoWrapper } from "@/components/shared/MonacoWrapper";
+import { generateMockData, regenerateSingleRow } from "./generator";
 
 const tool = TOOLS.find((t) => t.id === "mock-api")!;
 
@@ -30,15 +23,6 @@ const LOCALE_LABELS: Record<Locale, string> = {
 	FR: "France (Français)",
 	JP: "Japan (日本語)",
 	IN: "India (Hindi/English)",
-};
-
-const LOCALE_DESCRIPTIONS: Record<Locale, string> = {
-	US: "Use American English names, US addresses (street, city, state, ZIP), US phone formats (+1 XXX-XXX-XXXX), USD currency, MM/DD/YYYY dates.",
-	UK: "Use British English names, UK addresses (street, city, county, postcode), UK phone formats (+44 XXXX XXXXXX), GBP currency, DD/MM/YYYY dates.",
-	DE: "Use German names, German addresses (Straße, PLZ, Stadt), German phone formats (+49 XXXX XXXXXXX), EUR currency, DD.MM.YYYY dates.",
-	FR: "Use French names, French addresses (rue, code postal, ville), French phone formats (+33 X XX XX XX XX), EUR currency, DD/MM/YYYY dates.",
-	JP: "Use Japanese names (family name first), Japanese addresses (prefecture, city, ward), Japanese phone formats (+81 XX-XXXX-XXXX), JPY currency, YYYY/MM/DD dates.",
-	IN: "Use Indian names, Indian addresses (street, city, state, PIN code), Indian phone formats (+91 XXXXX XXXXX), INR currency, DD/MM/YYYY dates.",
 };
 
 interface MockApiPrefs {
@@ -60,216 +44,6 @@ const MODE_LANGUAGES: Record<InputMode, string> = {
 	example: "json",
 	description: "plaintext",
 };
-
-/** Attempt to resolve local $ref references in a JSON Schema object */
-function resolveLocalRefs(schema: string): string {
-	try {
-		const obj = JSON.parse(schema);
-		if (typeof obj !== "object" || obj === null) return schema;
-		const definitions =
-			obj.definitions || obj.$defs || obj.components?.schemas || {};
-		if (Object.keys(definitions).length === 0) return schema;
-
-		const resolved = JSON.parse(JSON.stringify(obj));
-
-		function walk(node: unknown): unknown {
-			if (typeof node !== "object" || node === null) return node;
-			if (Array.isArray(node)) return node.map(walk);
-
-			const record = node as Record<string, unknown>;
-			if (typeof record.$ref === "string") {
-				const refPath = record.$ref as string;
-				// Handle #/definitions/X, #/$defs/X, #/components/schemas/X
-				const match = refPath.match(
-					/^#\/(?:definitions|\$defs|components\/schemas)\/(.+)$/,
-				);
-				if (match && definitions[match[1]]) {
-					return walk(JSON.parse(JSON.stringify(definitions[match[1]])));
-				}
-			}
-
-			const result: Record<string, unknown> = {};
-			for (const [k, v] of Object.entries(record)) {
-				result[k] = walk(v);
-			}
-			return result;
-		}
-
-		const walkedResult = walk(resolved);
-		return JSON.stringify(walkedResult, null, 2);
-	} catch {
-		return schema;
-	}
-}
-
-function buildSystemPrompt(
-	mode: InputMode,
-	count: number,
-	outputFormat: OutputFormat,
-	locale: Locale,
-	seed: string,
-): string {
-	const formatInstruction =
-		outputFormat === "csv"
-			? `Return exactly ${count} records as CSV. First line is the header row with column names. Each subsequent line is one record. Use commas as delimiters. Quote fields that contain commas.`
-			: outputFormat === "ndjson"
-				? `Return exactly ${count} JSON objects, one per line (NDJSON format). No array wrapper. Each line must be valid JSON.`
-				: `Return a JSON array containing exactly ${count} objects. Output ONLY the JSON array, no other text.`;
-
-	const modeInstruction: Record<InputMode, string> = {
-		schema: `The user will provide a JSON Schema. Generate ${count} realistic mock records conforming to this schema.`,
-		example: `The user will provide an example JSON object. Generate ${count} realistic mock records with the same structure but varied, realistic data.`,
-		description: `The user will describe the data they want in plain English. Generate ${count} realistic mock records matching that description as a JSON structure.`,
-	};
-
-	const localeInstruction = `Locale: ${locale}. ${LOCALE_DESCRIPTIONS[locale]}`;
-	const seedInstruction = seed
-		? `Use seed "${seed}" as a consistency hint — try to produce the same output if given the same seed and input.`
-		: "";
-
-	return `You are a mock data generator. ${modeInstruction[mode]}
-
-${formatInstruction}
-
-${localeInstruction}
-${seedInstruction}
-
-Rules:
-- Generate realistic, varied data (real-looking names, emails, addresses, etc.)
-- Use diverse values — avoid repeating the same data across records
-- String fields should have realistic content appropriate to the field name
-- Number fields should be in reasonable ranges
-- Date fields should use ISO 8601 format
-- IDs should be unique across records
-- All generated data MUST match the specified locale for names, addresses, phone numbers, currency, and date formats
-- Return ONLY the data. No markdown, no code fences, no explanations.`;
-}
-
-async function generateMockData(
-	input: string,
-	mode: InputMode,
-	count: number,
-	outputFormat: OutputFormat,
-	apiKey: string,
-	locale: Locale,
-	seed: string,
-): Promise<string> {
-	// Resolve $ref for schema mode before sending to AI
-	const processedInput = mode === "schema" ? resolveLocalRefs(input) : input;
-
-	const systemPrompt = buildSystemPrompt(
-		mode,
-		count,
-		outputFormat,
-		locale,
-		seed,
-	);
-
-	const response = await fetch("https://api.anthropic.com/v1/messages", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"x-api-key": apiKey,
-			"anthropic-version": "2023-06-01",
-			"anthropic-dangerous-direct-browser-access": "true",
-		},
-		body: JSON.stringify({
-			model: "claude-sonnet-4-20250514",
-			max_tokens: 4096,
-			system: systemPrompt,
-			messages: [{ role: "user", content: processedInput }],
-		}),
-	});
-
-	if (!response.ok) {
-		const body = await response.text();
-		if (response.status === 401)
-			throw new Error("Invalid API key. Please check your Anthropic API key.");
-		if (response.status === 429)
-			throw new Error("Rate limited. Please wait a moment and try again.");
-		throw new Error(`API error (${response.status}): ${body}`);
-	}
-
-	const data = await response.json();
-	const text = data.content?.[0]?.text;
-	if (!text) throw new Error("Empty response from API");
-
-	// Validate the output is parseable
-	if (outputFormat === "json") {
-		try {
-			const parsed = JSON.parse(text);
-			return JSON.stringify(parsed, null, 2);
-		} catch {
-			// Try stripping markdown code fences if the model wrapped it
-			const stripped = text
-				.replace(/^```(?:json)?\n?/m, "")
-				.replace(/\n?```$/m, "")
-				.trim();
-			try {
-				const parsed = JSON.parse(stripped);
-				return JSON.stringify(parsed, null, 2);
-			} catch {
-				return text;
-			}
-		}
-	}
-
-	return text;
-}
-
-async function regenerateSingleRow(
-	input: string,
-	mode: InputMode,
-	rowIndex: number,
-	existingRow: unknown,
-	apiKey: string,
-	locale: Locale,
-): Promise<unknown> {
-	const processedInput = mode === "schema" ? resolveLocalRefs(input) : input;
-
-	const systemPrompt = `You are a mock data generator. Generate exactly 1 replacement record.
-
-The user will provide:
-1. The schema/example/description for the data structure
-2. The existing record at index ${rowIndex} that needs to be regenerated
-
-Generate ONE new record with the same structure but different, realistic data. Locale: ${locale}. ${LOCALE_DESCRIPTIONS[locale]}
-
-Return ONLY a single JSON object. No array wrapper, no markdown, no code fences, no explanations.`;
-
-	const userContent = `Data definition (${mode}):\n${processedInput}\n\nExisting record to replace:\n${JSON.stringify(existingRow)}`;
-
-	const response = await fetch("https://api.anthropic.com/v1/messages", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"x-api-key": apiKey,
-			"anthropic-version": "2023-06-01",
-			"anthropic-dangerous-direct-browser-access": "true",
-		},
-		body: JSON.stringify({
-			model: "claude-sonnet-4-20250514",
-			max_tokens: 1024,
-			system: systemPrompt,
-			messages: [{ role: "user", content: userContent }],
-		}),
-	});
-
-	if (!response.ok) {
-		const body = await response.text();
-		throw new Error(`API error (${response.status}): ${body}`);
-	}
-
-	const data = await response.json();
-	const text = data.content?.[0]?.text;
-	if (!text) throw new Error("Empty response from API");
-
-	const stripped = text
-		.replace(/^```(?:json)?\n?/m, "")
-		.replace(/\n?```$/m, "")
-		.trim();
-	return JSON.parse(stripped);
-}
 
 function buildFetchMockSnippet(
 	output: string,
@@ -312,73 +86,6 @@ export const handlers = [
   }),
 ];
 `;
-}
-
-// -- API Key Modal --
-function ApiKeyModal({
-	onSave,
-	onClose,
-}: {
-	onSave: (key: string) => void;
-	onClose?: () => void;
-}) {
-	const [keyInput, setKeyInput] = useState("");
-
-	return (
-		<div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60'>
-			<div className='w-full max-w-md rounded-lg border border-border bg-zinc-900 p-6 shadow-xl'>
-				<div className='mb-4 flex items-center gap-2'>
-					<Key className='h-5 w-5 text-accent' />
-					<h3 className='text-sm font-semibold'>Anthropic API Key Required</h3>
-					{onClose && (
-						<button
-							onClick={onClose}
-							className='ml-auto text-muted hover:text-foreground'
-							aria-label='Close'
-						>
-							<X className='h-4 w-4' />
-						</button>
-					)}
-				</div>
-				<p className='mb-3 text-xs text-muted-foreground'>
-					Enter your Anthropic API key to use AI-powered data generation. You
-					can get one from{" "}
-					<a
-						href='https://console.anthropic.com/'
-						target='_blank'
-						rel='noopener noreferrer'
-						className='text-accent underline'
-					>
-						console.anthropic.com
-					</a>
-				</p>
-				<div className='mb-3 flex items-start gap-2 rounded-md border border-info/30 bg-info/5 px-3 py-2'>
-					<ShieldCheck className='mt-0.5 h-3.5 w-3.5 shrink-0 text-info' />
-					<span className='text-[11px] text-info'>
-						Your API key is stored locally and sent directly to Anthropic's API.
-						It never touches any other server.
-					</span>
-				</div>
-				<input
-					type='password'
-					value={keyInput}
-					onChange={(e) => setKeyInput(e.target.value)}
-					placeholder='sk-ant-...'
-					className='mb-3 h-9 w-full rounded-md border border-border bg-zinc-800 px-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none'
-					autoFocus
-				/>
-				<button
-					onClick={() => {
-						if (keyInput.trim()) onSave(keyInput.trim());
-					}}
-					disabled={!keyInput.trim()}
-					className='h-8 w-full rounded-md bg-accent px-3 text-xs font-medium text-zinc-950 hover:bg-accent/80 disabled:opacity-50'
-				>
-					Save API Key
-				</button>
-			</div>
-		</div>
-	);
 }
 
 const PLACEHOLDER: Record<InputMode, string> = {
@@ -430,10 +137,8 @@ export function MockApiTool() {
 			seed: "",
 		},
 	);
-	const [apiKey, setApiKey] = useLocalStorage("devtools-anthropic-key", "");
-	const [showKeyModal, setShowKeyModal] = useState(false);
-	const [loading, setLoading] = useState(false);
 	const [regeneratingRow, setRegeneratingRow] = useState<number | null>(null);
+	// Note: regeneration is synchronous, but we keep state for potential future async use
 	const [error, setError] = useState<string | null>(null);
 	const [output, setOutput] = useState("");
 
@@ -446,11 +151,7 @@ export function MockApiTool() {
 		[setInputs, prefs.inputMode],
 	);
 
-	const handleGenerate = useCallback(async () => {
-		if (!apiKey) {
-			setShowKeyModal(true);
-			return;
-		}
+	const handleGenerate = useCallback(() => {
 		const trimmed = currentInput.trim();
 		if (!trimmed) return;
 
@@ -466,26 +167,22 @@ export function MockApiTool() {
 			}
 		}
 
-		setLoading(true);
 		setError(null);
 		setOutput("");
 		try {
-			const data = await generateMockData(
+			const data = generateMockData(
 				trimmed,
 				prefs.inputMode,
 				prefs.recordCount,
 				prefs.outputFormat,
-				apiKey,
 				prefs.locale,
 				prefs.seed,
 			);
 			setOutput(data);
 		} catch (e) {
 			setError(e instanceof Error ? e.message : "Generation failed");
-		} finally {
-			setLoading(false);
 		}
-	}, [currentInput, prefs, apiKey]);
+	}, [currentInput, prefs]);
 
 	const handleClear = useCallback(() => {
 		setCurrentInput("");
@@ -505,17 +202,14 @@ export function MockApiTool() {
 	}, [output, prefs.outputFormat]);
 
 	const handleRegenerateRow = useCallback(
-		async (rowIndex: number) => {
-			if (!apiKey || !parsedOutputArray || !parsedOutputArray[rowIndex]) return;
+		(rowIndex: number) => {
+			if (!parsedOutputArray || !parsedOutputArray[rowIndex]) return;
 			setRegeneratingRow(rowIndex);
 			setError(null);
 			try {
-				const newRow = await regenerateSingleRow(
+				const newRow = regenerateSingleRow(
 					currentInput.trim(),
 					prefs.inputMode,
-					rowIndex,
-					parsedOutputArray[rowIndex],
-					apiKey,
 					prefs.locale,
 				);
 				const updated = [...parsedOutputArray];
@@ -531,7 +225,7 @@ export function MockApiTool() {
 				setRegeneratingRow(null);
 			}
 		},
-		[apiKey, parsedOutputArray, currentInput, prefs.inputMode, prefs.locale],
+		[parsedOutputArray, currentInput, prefs.inputMode, prefs.locale],
 	);
 
 	const fetchMockSnippet = useMemo(
@@ -551,31 +245,14 @@ export function MockApiTool() {
 				<meta name='description' content={tool.description} />
 			</Helmet>
 
-			{(showKeyModal || !apiKey) && (
-				<ApiKeyModal
-					onSave={(key) => {
-						setApiKey(key);
-						setShowKeyModal(false);
-					}}
-					onClose={apiKey ? () => setShowKeyModal(false) : undefined}
-				/>
-			)}
-
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>
 					<button
 						onClick={handleGenerate}
-						disabled={loading || !currentInput.trim()}
+						disabled={!currentInput.trim()}
 						className='h-8 rounded-md bg-accent px-3 text-xs font-medium text-zinc-950 hover:bg-accent/80 disabled:opacity-50'
 					>
-						{loading ? (
-							<span className='flex items-center gap-1.5'>
-								<Loader2 className='h-3.5 w-3.5 animate-spin' />
-								Generating…
-							</span>
-						) : (
-							"Generate"
-						)}
+						Generate
 					</button>
 					<div className='flex items-center gap-1.5'>
 						<label
@@ -601,18 +278,7 @@ export function MockApiTool() {
 							{prefs.recordCount}
 						</span>
 					</div>
-					{prefs.recordCount > 50 && (
-						<div
-							className='flex items-center gap-1 rounded-md border border-yellow-600/40 bg-yellow-600/10 px-2 py-1'
-							role='alert'
-							aria-label='Token usage warning'
-						>
-							<AlertTriangle className='h-3 w-3 text-yellow-500' />
-							<span className='text-[10px] text-yellow-400'>
-								High token usage
-							</span>
-						</div>
-					)}
+
 					<select
 						value={prefs.outputFormat}
 						onChange={(e) =>
@@ -667,13 +333,6 @@ export function MockApiTool() {
 						className='h-8 rounded-md bg-zinc-700 px-3 text-xs font-medium text-zinc-200 hover:bg-zinc-600'
 					>
 						Clear
-					</button>
-					<button
-						onClick={() => setShowKeyModal(true)}
-						className='h-8 rounded-md bg-zinc-700 px-3 text-xs font-medium text-zinc-200 hover:bg-zinc-600'
-						title='Change API key'
-					>
-						<Key className='h-3.5 w-3.5' />
 					</button>
 				</ToolPageHeader>
 
@@ -730,14 +389,7 @@ export function MockApiTool() {
 							</span>
 						</div>
 						<div className='flex-1 overflow-hidden'>
-							{loading ? (
-								<div className='flex h-full flex-col items-center justify-center gap-3'>
-									<Loader2 className='h-6 w-6 animate-spin text-accent' />
-									<p className='text-xs text-muted-foreground'>
-										Generating {prefs.recordCount} records…
-									</p>
-								</div>
-							) : output ? (
+							{output ? (
 								<div className='flex h-full flex-col'>
 									{/* Per-row regenerate buttons for JSON array output */}
 									{parsedOutputArray && parsedOutputArray.length > 0 && (
@@ -752,21 +404,12 @@ export function MockApiTool() {
 												<button
 													key={i}
 													onClick={() => handleRegenerateRow(i)}
-													disabled={regeneratingRow !== null || loading}
-													className={cn(
-														"inline-flex h-6 items-center gap-0.5 rounded px-1.5 text-[10px] font-medium transition-colors",
-														regeneratingRow === i
-															? "bg-accent/20 text-accent"
-															: "bg-zinc-700 text-zinc-300 hover:bg-zinc-600",
-													)}
+													disabled={regeneratingRow !== null}
+													className='inline-flex h-6 items-center gap-0.5 rounded bg-zinc-700 px-1.5 text-[10px] font-medium text-zinc-300 transition-colors hover:bg-zinc-600'
 													title={`Regenerate row ${i}`}
 													aria-label={`Regenerate row ${i}`}
 												>
-													{regeneratingRow === i ? (
-														<Loader2 className='h-2.5 w-2.5 animate-spin' />
-													) : (
-														<RefreshCw className='h-2.5 w-2.5' />
-													)}
+													<RefreshCw className='h-2.5 w-2.5' />
 													{i}
 												</button>
 											))}

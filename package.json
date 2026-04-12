@@ -49,6 +49,7 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.4.0",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@monaco-editor/react": "^4.7.0",
@@ -64,6 +65,7 @@
     "js-yaml": "^4.1.1",
     "jsondiffpatch": "^0.7.3",
     "lucide-react": "^1.8.0",
+    "node-sql-parser": "^5.4.0",
     "prettier": "^3.8.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

@@ -3,9 +3,6 @@ import { Helmet } from "react-helmet-async";
 import {
 	Database,
 	AlertTriangle,
-	Loader2,
-	Key,
-	ShieldCheck,
 	ArrowRight,
 	X,
 	Filter,
@@ -23,6 +20,16 @@ import { cn } from "@/lib/utils";
 import { ToolPageHeader } from "@/components/shared/ToolPageHeader";
 import { ErrorBox } from "@/components/shared/ErrorBox";
 import { MonacoWrapper } from "@/components/shared/MonacoWrapper";
+import {
+	analyzeSQL,
+	type AnalysisResult,
+	type TableInfo,
+	type JoinInfo,
+	type FilterInfo,
+	type PotentialIssue,
+	type DataFlowStep,
+	type GroupingInfo,
+} from "./analyzer";
 
 const tool = TOOLS.find((t) => t.id === "sql-visualizer")!;
 
@@ -30,76 +37,6 @@ type Dialect = "postgresql" | "mysql" | "sqlite" | "sqlserver" | "bigquery";
 
 interface SqlVisualizerPrefs {
 	dialect: Dialect;
-}
-
-interface TableInfo {
-	name: string;
-	alias: string | null;
-	role: "primary" | "joined" | "subquery" | "cte";
-	columns: string[];
-}
-
-interface JoinInfo {
-	type: string;
-	leftTable: string;
-	rightTable: string;
-	condition: string;
-	explanation: string;
-}
-
-interface FilterInfo {
-	clause: "WHERE" | "HAVING";
-	condition: string;
-	explanation: string;
-}
-
-interface OutputColumn {
-	name: string;
-	source: string;
-	expression?: string;
-	typeGuess: string;
-}
-
-interface PotentialIssue {
-	severity: "warning" | "info";
-	title: string;
-	description: string;
-}
-
-interface DataFlowStep {
-	step: string;
-	description: string;
-	present: boolean;
-}
-
-interface AggregateInfo {
-	function: string;
-	column: string;
-	alias: string;
-}
-
-interface GroupingInfo {
-	groupByColumns: string[];
-	aggregates: AggregateInfo[];
-}
-
-interface OutputShapeInfo {
-	estimatedShape: string;
-	limit: number | null;
-	offset: number | null;
-}
-
-interface AnalysisResult {
-	summary: string;
-	complexityScore: number;
-	tables: TableInfo[];
-	joins: JoinInfo[];
-	filters: FilterInfo[];
-	outputColumns: OutputColumn[];
-	potentialIssues: PotentialIssue[];
-	dataFlowSteps?: DataFlowStep[];
-	grouping?: GroupingInfo;
-	outputShape?: OutputShapeInfo;
 }
 
 interface HistoryEntry {
@@ -121,60 +58,6 @@ type ResultTab =
 	| "grouping"
 	| "issues";
 
-const SYSTEM_PROMPT = `You are a SQL analysis engine. Given a SQL query and its dialect, return a JSON object with this exact structure (no markdown, no code fences, pure JSON only):
-
-{
-  "summary": "Plain English explanation of what the query does",
-  "complexityScore": <number 1-10>,
-  "tables": [
-    { "name": "table_name", "alias": "t" or null, "role": "primary" or "joined" or "subquery" or "cte", "columns": ["col1", "col2"] }
-  ],
-  "joins": [
-    { "type": "INNER JOIN", "leftTable": "a", "rightTable": "b", "condition": "a.id = b.a_id", "explanation": "Plain English" }
-  ],
-  "filters": [
-    { "clause": "WHERE" or "HAVING", "condition": "col > 5", "explanation": "Plain English" }
-  ],
-  "outputColumns": [
-    { "name": "column_name", "source": "table_name", "expression": "COUNT(*) or column_name", "typeGuess": "integer" }
-  ],
-  "potentialIssues": [
-    { "severity": "warning" or "info", "title": "Issue Title", "description": "Explanation" }
-  ],
-  "dataFlowSteps": [
-    { "step": "FROM", "description": "Read from table_name", "present": true },
-    { "step": "WHERE", "description": "Filter where condition", "present": true },
-    { "step": "JOIN", "description": "Join with other_table", "present": false },
-    { "step": "GROUP BY", "description": "Group by columns", "present": false },
-    { "step": "HAVING", "description": "Filter groups", "present": false },
-    { "step": "ORDER BY", "description": "Sort by columns", "present": true },
-    { "step": "LIMIT", "description": "Return first N rows", "present": true },
-    { "step": "SELECT", "description": "Select columns", "present": true }
-  ],
-  "grouping": {
-    "groupByColumns": ["col1", "col2"],
-    "aggregates": [
-      { "function": "COUNT", "column": "*", "alias": "total" }
-    ]
-  },
-  "outputShape": {
-    "estimatedShape": "One row per user with their order count",
-    "limit": 10,
-    "offset": 0
-  }
-}
-
-Rules:
-- Return ONLY valid JSON. No additional text.
-- If no joins exist, return an empty array for joins.
-- If no filters exist, return an empty array for filters.
-- dataFlowSteps MUST always include all 8 steps (FROM, WHERE, JOIN, GROUP BY, HAVING, ORDER BY, LIMIT, SELECT) with "present" indicating whether the step is used.
-- If no GROUP BY, return empty arrays for groupByColumns and aggregates.
-- outputShape.limit and outputShape.offset should be null if not specified in the query.
-- expression in outputColumns is the raw SQL expression for computed columns, or the column name for simple selections.
-- Be thorough in identifying potential performance issues like missing indexes, cartesian products, SELECT *, N+1 patterns, etc.
-- complexityScore: 1=trivial SELECT, 5=moderate joins/subqueries, 10=extremely complex.`;
-
 function getComplexityColor(score: number): string {
 	if (score <= 3) return "bg-green-400";
 	if (score <= 6) return "bg-amber-400";
@@ -185,118 +68,6 @@ function getComplexityLabel(score: number): string {
 	if (score <= 3) return "Simple";
 	if (score <= 6) return "Moderate";
 	return "Complex";
-}
-
-async function analyzeSQL(
-	sql: string,
-	dialect: Dialect,
-	apiKey: string,
-): Promise<AnalysisResult> {
-	const response = await fetch("https://api.anthropic.com/v1/messages", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"x-api-key": apiKey,
-			"anthropic-version": "2023-06-01",
-			"anthropic-dangerous-direct-browser-access": "true",
-		},
-		body: JSON.stringify({
-			model: "claude-sonnet-4-20250514",
-			max_tokens: 4096,
-			system: SYSTEM_PROMPT,
-			messages: [
-				{ role: "user", content: `Dialect: ${dialect}\n\nSQL Query:\n${sql}` },
-			],
-		}),
-	});
-
-	if (!response.ok) {
-		const body = await response.text();
-		if (response.status === 401)
-			throw new Error("Invalid API key. Please check your Anthropic API key.");
-		if (response.status === 429)
-			throw new Error("Rate limited. Please wait a moment and try again.");
-		throw new Error(`API error (${response.status}): ${body}`);
-	}
-
-	const data = await response.json();
-	const text = data.content?.[0]?.text;
-	if (!text) throw new Error("Empty response from API");
-
-	try {
-		return JSON.parse(text) as AnalysisResult;
-	} catch {
-		throw new Error(
-			"Failed to parse API response as JSON. The model returned unexpected output.",
-		);
-	}
-}
-
-// -- API Key Modal --
-function ApiKeyModal({
-	onSave,
-	onClose,
-}: {
-	onSave: (key: string) => void;
-	onClose?: () => void;
-}) {
-	const [keyInput, setKeyInput] = useState("");
-
-	return (
-		<div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60'>
-			<div className='w-full max-w-md rounded-lg border border-border bg-zinc-900 p-6 shadow-xl'>
-				<div className='mb-4 flex items-center gap-2'>
-					<Key className='h-5 w-5 text-accent' />
-					<h3 className='text-sm font-semibold'>Anthropic API Key Required</h3>
-					{onClose && (
-						<button
-							onClick={onClose}
-							className='ml-auto text-muted hover:text-foreground'
-							aria-label='Close'
-						>
-							<X className='h-4 w-4' />
-						</button>
-					)}
-				</div>
-				<p className='mb-3 text-xs text-muted-foreground'>
-					Enter your Anthropic API key to use AI-powered analysis. You can get
-					one from{" "}
-					<a
-						href='https://console.anthropic.com/'
-						target='_blank'
-						rel='noopener noreferrer'
-						className='text-accent underline'
-					>
-						console.anthropic.com
-					</a>
-				</p>
-				<div className='mb-3 flex items-start gap-2 rounded-md border border-info/30 bg-info/5 px-3 py-2'>
-					<ShieldCheck className='mt-0.5 h-3.5 w-3.5 shrink-0 text-info' />
-					<span className='text-[11px] text-info'>
-						Your API key is stored locally and sent directly to Anthropic's API.
-						It never touches any other server.
-					</span>
-				</div>
-				<input
-					type='password'
-					value={keyInput}
-					onChange={(e) => setKeyInput(e.target.value)}
-					placeholder='sk-ant-...'
-					className='mb-3 h-9 w-full rounded-md border border-border bg-zinc-800 px-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none'
-					autoFocus
-				/>
-				<button
-					onClick={() => {
-						if (keyInput.trim()) onSave(keyInput.trim());
-					}}
-					disabled={!keyInput.trim()}
-					className='h-8 w-full rounded-md bg-accent px-3 text-xs font-medium text-zinc-950 hover:bg-accent/80 disabled:opacity-50'
-				>
-					Save API Key
-				</button>
-			</div>
-		</div>
-	);
 }
 
 // -- Result Panels --
@@ -425,9 +196,13 @@ function FiltersPanel({ filters }: { filters: FilterInfo[] }) {
 						{f.clause}
 					</span>
 					<p className='mt-2 font-mono text-[11px] text-muted-foreground'>
-						{f.condition}
+						{f.expression}
 					</p>
-					<p className='mt-1.5 text-xs text-foreground/80'>{f.explanation}</p>
+					{f.columns.length > 0 && (
+						<p className='mt-1.5 text-xs text-foreground/80'>
+							Columns: {f.columns.join(", ")}
+						</p>
+					)}
 				</div>
 			))}
 		</div>
@@ -1147,22 +922,6 @@ function HistorySidebar({
 	);
 }
 
-// -- Skeleton Loader --
-function AnalysisSkeleton() {
-	return (
-		<div className='animate-pulse space-y-4 p-4'>
-			<div className='h-4 w-3/4 rounded bg-zinc-700' />
-			<div className='h-3 w-full rounded bg-zinc-700' />
-			<div className='h-3 w-5/6 rounded bg-zinc-700' />
-			<div className='mt-4 h-2.5 w-full rounded-full bg-zinc-700' />
-			<div className='mt-6 grid grid-cols-2 gap-3'>
-				<div className='h-24 rounded-lg bg-zinc-700' />
-				<div className='h-24 rounded-lg bg-zinc-700' />
-			</div>
-		</div>
-	);
-}
-
 const TABS: { key: ResultTab; label: string }[] = [
 	{ key: "summary", label: "Summary" },
 	{ key: "tables", label: "Tables" },
@@ -1187,9 +946,6 @@ export function SqlVisualizerTool() {
 			dialect: "postgresql",
 		},
 	);
-	const [apiKey, setApiKey] = useLocalStorage("devtools-anthropic-key", "");
-	const [showKeyModal, setShowKeyModal] = useState(false);
-	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [result, setResult] = useState<AnalysisResult | null>(null);
 	const [activeTab, setActiveTab] = useState<ResultTab>("summary");
@@ -1199,26 +955,14 @@ export function SqlVisualizerTool() {
 	);
 	const [showHistory, setShowHistory] = useState(false);
 
-	const handleAnalyze = useCallback(async () => {
-		if (!apiKey) {
-			setShowKeyModal(true);
-			return;
-		}
+	const handleAnalyze = useCallback(() => {
 		const trimmed = input.trim();
 		if (!trimmed) return;
 
-		if (trimmed.length > 5000) {
-			const proceed = window.confirm(
-				`This query is ${trimmed.length.toLocaleString()} characters long. Very long queries may produce incomplete analysis. Continue?`,
-			);
-			if (!proceed) return;
-		}
-
-		setLoading(true);
 		setError(null);
 		setResult(null);
 		try {
-			const analysis = await analyzeSQL(trimmed, prefs.dialect, apiKey);
+			const analysis = analyzeSQL(trimmed, prefs.dialect);
 			setResult(analysis);
 			setActiveTab("summary");
 			setHistory((prev) => {
@@ -1232,10 +976,8 @@ export function SqlVisualizerTool() {
 			});
 		} catch (e) {
 			setError(e instanceof Error ? e.message : "Analysis failed");
-		} finally {
-			setLoading(false);
 		}
-	}, [input, prefs.dialect, apiKey, setHistory]);
+	}, [input, prefs.dialect, setHistory]);
 
 	const handleClear = useCallback(() => {
 		setInput("");
@@ -1261,31 +1003,14 @@ export function SqlVisualizerTool() {
 				<meta name='description' content={tool.description} />
 			</Helmet>
 
-			{(showKeyModal || !apiKey) && (
-				<ApiKeyModal
-					onSave={(key) => {
-						setApiKey(key);
-						setShowKeyModal(false);
-					}}
-					onClose={apiKey ? () => setShowKeyModal(false) : undefined}
-				/>
-			)}
-
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>
 					<button
 						onClick={handleAnalyze}
-						disabled={loading || !input.trim()}
+						disabled={!input.trim()}
 						className='h-8 rounded-md bg-accent px-3 text-xs font-medium text-zinc-950 hover:bg-accent/80 disabled:opacity-50'
 					>
-						{loading ? (
-							<span className='flex items-center gap-1.5'>
-								<Loader2 className='h-3.5 w-3.5 animate-spin' />
-								Analyzing…
-							</span>
-						) : (
-							"Analyze"
-						)}
+						Analyze
 					</button>
 					<select
 						value={prefs.dialect}
@@ -1306,13 +1031,6 @@ export function SqlVisualizerTool() {
 						className='h-8 rounded-md bg-zinc-700 px-3 text-xs font-medium text-zinc-200 hover:bg-zinc-600'
 					>
 						Clear
-					</button>
-					<button
-						onClick={() => setShowKeyModal(true)}
-						className='h-8 rounded-md bg-zinc-700 px-3 text-xs font-medium text-zinc-200 hover:bg-zinc-600'
-						title='Change API key'
-					>
-						<Key className='h-3.5 w-3.5' />
 					</button>
 					<button
 						onClick={() => setShowHistory((v) => !v)}
@@ -1372,7 +1090,6 @@ export function SqlVisualizerTool() {
 						</div>
 
 						<div className='flex-1 overflow-auto'>
-							{loading && <AnalysisSkeleton />}
 							{error && (
 								<div className='p-4'>
 									<ErrorBox error={error} />
@@ -1384,7 +1101,7 @@ export function SqlVisualizerTool() {
 									</button>
 								</div>
 							)}
-							{!loading && !error && !result && (
+							{!error && !result && (
 								<div className='flex h-full flex-col items-center justify-center p-8 text-center'>
 									<Database className='mb-3 h-8 w-8 text-muted' />
 									<p className='text-xs text-muted-foreground'>
@@ -1393,7 +1110,7 @@ export function SqlVisualizerTool() {
 									</p>
 								</div>
 							)}
-							{!loading && result && (
+							{result && (
 								<>
 									{activeTab === "summary" && <SummaryPanel result={result} />}
 									{activeTab === "tables" && (
