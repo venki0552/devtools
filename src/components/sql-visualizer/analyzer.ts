@@ -81,6 +81,76 @@ const DIALECT_MAP: Record<Dialect, string> = {
 	bigquery: "BigQuery",
 };
 
+// Common SQL reserved words that users often use as table/column names.
+// When the parser chokes on these, we auto-quote them and retry.
+const SQL_RESERVED_IDENTIFIERS = new Set([
+	"call", "order", "group", "key", "user", "table", "column", "index",
+	"value", "name", "check", "primary", "unique", "action", "condition",
+	"domain", "match", "option", "output", "result", "return", "trigger",
+	"work", "role", "type", "status", "level", "range", "rows", "start",
+	"end", "language", "signal", "state", "comment", "default", "desc",
+	"function", "procedure", "schema", "sequence", "session", "system",
+	"time", "timestamp", "zone", "data", "date", "event", "file", "format",
+	"host", "input", "interval", "module", "password", "path", "plan",
+	"port", "read", "release", "replace", "row", "scope", "second", "size",
+	"source", "space", "usage", "view", "write", "year", "month", "day",
+	"hour", "minute", "position", "open", "close", "current", "free",
+	"general", "global", "local", "next", "no", "only", "prior", "object",
+]);
+
+function quoteIdentifier(word: string, dialect: Dialect): string {
+	if (dialect === "mysql") return `\`${word}\``;
+	if (dialect === "sqlserver") return `[${word}]`;
+	return `"${word}"`;
+}
+
+/**
+ * Pre-process SQL to quote reserved words used as identifiers.
+ * Detects reserved words appearing in table-reference positions
+ * (after FROM/JOIN, as table prefixes in dot notation) and wraps
+ * them in dialect-appropriate quotes so the parser can handle them.
+ */
+function sanitizeReservedWords(sql: string, dialect: Dialect): string {
+	// Collect reserved words that appear to be used as identifiers
+	const wordsToQuote = new Set<string>();
+
+	// Pattern 1: word.column — the word is likely a table/alias reference
+	const dotPattern = /\b(\w+)\.\w+/g;
+	let m: RegExpExecArray | null;
+	while ((m = dotPattern.exec(sql)) !== null) {
+		if (SQL_RESERVED_IDENTIFIERS.has(m[1].toLowerCase())) {
+			wordsToQuote.add(m[1]);
+		}
+	}
+
+	// Pattern 2: FROM/JOIN word — table name after FROM or JOIN keyword
+	const fromJoinPattern = /\b(?:FROM|JOIN)\s+(\w+)\b/gi;
+	while ((m = fromJoinPattern.exec(sql)) !== null) {
+		if (SQL_RESERVED_IDENTIFIERS.has(m[1].toLowerCase())) {
+			wordsToQuote.add(m[1]);
+		}
+	}
+
+	if (wordsToQuote.size === 0) return sql;
+
+	let result = sql;
+	for (const word of wordsToQuote) {
+		const quoted = quoteIdentifier(word, dialect);
+		// Quote before dot (table.column references)
+		result = result.replace(
+			new RegExp(`\\b${word}\\b(?=\\.)`, "gi"),
+			quoted,
+		);
+		// Quote after FROM/JOIN
+		result = result.replace(
+			new RegExp(`(\\b(?:FROM|JOIN)\\s+)${word}\\b`, "gi"),
+			`$1${quoted}`,
+		);
+	}
+
+	return result;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AstNode = any;
 
@@ -92,8 +162,21 @@ function getColumnName(col: AstNode): string {
 	return "*";
 }
 
+function getFunctionName(name: AstNode): string {
+	if (typeof name === "string") return name;
+	if (name?.name && Array.isArray(name.name)) {
+		return name.name.map((n: AstNode) => n.value || n).join(".");
+	}
+	if (name?.value) return String(name.value);
+	return String(name || "?");
+}
+
 function exprToString(expr: AstNode): string {
 	if (!expr) return "";
+	// Subquery expression (e.g. in HAVING ... > (SELECT ...))
+	if (expr.ast) {
+		return "(subquery)";
+	}
 	if (expr.type === "column_ref") {
 		const col = getColumnName(expr.column);
 		return expr.table ? `${expr.table}.${col}` : col;
@@ -113,10 +196,13 @@ function exprToString(expr: AstNode): string {
 		return `${expr.name}(${args})`;
 	}
 	if (expr.type === "function") {
-		const args = expr.args?.value
-			?.map((a: AstNode) => exprToString(a))
-			.join(", ");
-		return `${expr.name}(${args || ""})`;
+		const fnName = getFunctionName(expr.name);
+		const args = expr.args?.type === "expr_list"
+			? expr.args.value?.map((a: AstNode) => exprToString(a)).join(", ")
+			: expr.args?.value
+				?.map((a: AstNode) => exprToString(a))
+				.join(", ");
+		return `${fnName}(${args || ""})`;
 	}
 	if (expr.type === "expr_list") {
 		if (expr.value?.[0]?.ast) return "(subquery)";
@@ -143,10 +229,21 @@ function extractColumnsFromExpr(expr: AstNode, result: string[] = []): string[] 
 	if (expr.type === "column_ref") {
 		result.push(exprToString(expr));
 	}
+	if (expr.ast) {
+		// Subquery — recurse into the subquery's columns, where, etc.
+		extractColumnsFromExpr(expr.ast?.where, result);
+	}
 	if (expr.left) extractColumnsFromExpr(expr.left, result);
 	if (expr.right) extractColumnsFromExpr(expr.right, result);
 	if (expr.expr) extractColumnsFromExpr(expr.expr, result);
 	if (expr.args?.expr) extractColumnsFromExpr(expr.args.expr, result);
+	// Handle function args stored as expr_list
+	if (expr.args?.type === "expr_list" && Array.isArray(expr.args.value)) {
+		for (const v of expr.args.value) extractColumnsFromExpr(v, result);
+	}
+	if (Array.isArray(expr.value)) {
+		for (const v of expr.value) extractColumnsFromExpr(v, result);
+	}
 	return result;
 }
 
@@ -401,8 +498,19 @@ function extractTableColumns(ast: AstNode, tableName: string, alias: string | nu
 		if (node.right) visitExpr(node.right);
 		if (node.expr) visitExpr(node.expr);
 		if (node.args?.expr) visitExpr(node.args.expr);
+		// Handle function args stored as expr_list
+		if (node.args?.type === "expr_list" && Array.isArray(node.args.value)) {
+			for (const v of node.args.value) visitExpr(v);
+		}
 		if (Array.isArray(node.value)) {
 			for (const v of node.value) visitExpr(v);
+		}
+		// Handle CASE expressions
+		if (Array.isArray(node.args)) {
+			for (const a of node.args) {
+				if (a.cond) visitExpr(a.cond);
+				if (a.result) visitExpr(a.result);
+			}
 		}
 	};
 
@@ -665,10 +773,23 @@ export function analyzeSQL(sql: string, dialect: Dialect): AnalysisResult {
 	let ast: AstNode;
 	try {
 		ast = parser.astify(sql, { database: dbType });
-	} catch (e) {
-		throw new Error(
-			`SQL parse error: ${e instanceof Error ? e.message : "Invalid SQL syntax"}`,
-		);
+	} catch {
+		// Retry with reserved-word quoting — common issue when table/column
+		// names collide with SQL keywords (e.g. "call", "order", "user").
+		const sanitized = sanitizeReservedWords(sql, dialect);
+		if (sanitized !== sql) {
+			try {
+				ast = parser.astify(sanitized, { database: dbType });
+			} catch (e2) {
+				throw new Error(
+					`SQL parse error: ${e2 instanceof Error ? e2.message : "Invalid SQL syntax"}`,
+				);
+			}
+		} else {
+			throw new Error(
+				`SQL parse error: ${sql.length > 0 ? "Could not parse the SQL. Check for syntax errors or unsupported dialect features." : "Invalid SQL syntax"}`,
+			);
+		}
 	}
 
 	// Handle multiple statements — analyze the first one
