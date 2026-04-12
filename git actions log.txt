@@ -1,0 +1,655 @@
+2026-04-12T00:46:13.7729228Z Current runner version: '2.333.1'
+2026-04-12T00:46:13.7762935Z ##[group]Runner Image Provisioner
+2026-04-12T00:46:13.7764267Z Hosted Compute Agent
+2026-04-12T00:46:13.7765278Z Version: 20260213.493
+2026-04-12T00:46:13.7766240Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-04-12T00:46:13.7767358Z Build Date: 2026-02-13T00:28:41Z
+2026-04-12T00:46:13.7768365Z Worker ID: {38dd8530-6498-4c6f-87df-665724b2c616}
+2026-04-12T00:46:13.7769578Z Azure Region: eastus2
+2026-04-12T00:46:13.7770720Z ##[endgroup]
+2026-04-12T00:46:13.7773190Z ##[group]Operating System
+2026-04-12T00:46:13.7774246Z Ubuntu
+2026-04-12T00:46:13.7774944Z 24.04.4
+2026-04-12T00:46:13.7775881Z LTS
+2026-04-12T00:46:13.7776622Z ##[endgroup]
+2026-04-12T00:46:13.7777573Z ##[group]Runner Image
+2026-04-12T00:46:13.7778454Z Image: ubuntu-24.04
+2026-04-12T00:46:13.7779323Z Version: 20260406.80.1
+2026-04-12T00:46:13.7781595Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260406.80/images/ubuntu/Ubuntu2404-Readme.md
+2026-04-12T00:46:13.7784158Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260406.80
+2026-04-12T00:46:13.7785816Z ##[endgroup]
+2026-04-12T00:46:13.7787483Z ##[group]GITHUB_TOKEN Permissions
+2026-04-12T00:46:13.7790526Z Contents: read
+2026-04-12T00:46:13.7791379Z Metadata: read
+2026-04-12T00:46:13.7792165Z ##[endgroup]
+2026-04-12T00:46:13.7795161Z Secret source: Actions
+2026-04-12T00:46:13.7796487Z Prepare workflow directory
+2026-04-12T00:46:13.8280486Z Prepare all required actions
+2026-04-12T00:46:13.8336574Z Getting action download info
+2026-04-12T00:46:14.0677987Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-04-12T00:46:14.1807629Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-04-12T00:46:14.3795895Z Complete job name: Build & Test (20)
+2026-04-12T00:46:14.4420092Z ##[group]Run actions/checkout@v4
+2026-04-12T00:46:14.4421173Z with:
+2026-04-12T00:46:14.4421583Z   repository: venki0552/devtools
+2026-04-12T00:46:14.4422235Z   token: ***
+2026-04-12T00:46:14.4422611Z   ssh-strict: true
+2026-04-12T00:46:14.4422998Z   ssh-user: git
+2026-04-12T00:46:14.4423384Z   persist-credentials: true
+2026-04-12T00:46:14.4423821Z   clean: true
+2026-04-12T00:46:14.4424224Z   sparse-checkout-cone-mode: true
+2026-04-12T00:46:14.4424718Z   fetch-depth: 1
+2026-04-12T00:46:14.4425147Z   fetch-tags: false
+2026-04-12T00:46:14.4425584Z   show-progress: true
+2026-04-12T00:46:14.4426029Z   lfs: false
+2026-04-12T00:46:14.4426432Z   submodules: false
+2026-04-12T00:46:14.4426883Z   set-safe-directory: true
+2026-04-12T00:46:14.4427538Z ##[endgroup]
+2026-04-12T00:46:14.5535987Z Syncing repository: venki0552/devtools
+2026-04-12T00:46:14.5537711Z ##[group]Getting Git version info
+2026-04-12T00:46:14.5538432Z Working directory is '/home/runner/work/devtools/devtools'
+2026-04-12T00:46:14.5539480Z [command]/usr/bin/git version
+2026-04-12T00:46:14.5577620Z git version 2.53.0
+2026-04-12T00:46:14.5604512Z ##[endgroup]
+2026-04-12T00:46:14.5620867Z Temporarily overriding HOME='/home/runner/work/_temp/111688c6-3a5d-412f-b609-aebe731a6fb2' before making global git config changes
+2026-04-12T00:46:14.5623243Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-12T00:46:14.5635394Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/devtools/devtools
+2026-04-12T00:46:14.5666764Z Deleting the contents of '/home/runner/work/devtools/devtools'
+2026-04-12T00:46:14.5670089Z ##[group]Initializing the repository
+2026-04-12T00:46:14.5675577Z [command]/usr/bin/git init /home/runner/work/devtools/devtools
+2026-04-12T00:46:14.5771555Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-04-12T00:46:14.5773177Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-04-12T00:46:14.5774354Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-04-12T00:46:14.5775078Z hint: call:
+2026-04-12T00:46:14.5775663Z hint:
+2026-04-12T00:46:14.5776138Z hint: 	git config --global init.defaultBranch <name>
+2026-04-12T00:46:14.5776709Z hint:
+2026-04-12T00:46:14.5777250Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-04-12T00:46:14.5778522Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-04-12T00:46:14.5779362Z hint:
+2026-04-12T00:46:14.5779744Z hint: 	git branch -m <name>
+2026-04-12T00:46:14.5780447Z hint:
+2026-04-12T00:46:14.5781074Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-04-12T00:46:14.5782242Z Initialized empty Git repository in /home/runner/work/devtools/devtools/.git/
+2026-04-12T00:46:14.5784140Z [command]/usr/bin/git remote add origin https://github.com/venki0552/devtools
+2026-04-12T00:46:14.5812551Z ##[endgroup]
+2026-04-12T00:46:14.5813331Z ##[group]Disabling automatic garbage collection
+2026-04-12T00:46:14.5816363Z [command]/usr/bin/git config --local gc.auto 0
+2026-04-12T00:46:14.5842863Z ##[endgroup]
+2026-04-12T00:46:14.5843548Z ##[group]Setting up auth
+2026-04-12T00:46:14.5849695Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-12T00:46:14.5878753Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-12T00:46:14.6162469Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-12T00:46:14.6192481Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-12T00:46:14.6403279Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-12T00:46:14.6432477Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-12T00:46:14.6645216Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-04-12T00:46:14.6677681Z ##[endgroup]
+2026-04-12T00:46:14.6678479Z ##[group]Fetching the repository
+2026-04-12T00:46:14.6686243Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3834ebc9cfb7a9625dfacbb16f2da2227c195b1b:refs/remotes/origin/master
+2026-04-12T00:46:14.8903292Z From https://github.com/venki0552/devtools
+2026-04-12T00:46:14.8904143Z  * [new ref]         3834ebc9cfb7a9625dfacbb16f2da2227c195b1b -> origin/master
+2026-04-12T00:46:14.8932517Z ##[endgroup]
+2026-04-12T00:46:14.8933584Z ##[group]Determining the checkout info
+2026-04-12T00:46:14.8934763Z ##[endgroup]
+2026-04-12T00:46:14.8939563Z [command]/usr/bin/git sparse-checkout disable
+2026-04-12T00:46:14.8975425Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-04-12T00:46:14.9001049Z ##[group]Checking out the ref
+2026-04-12T00:46:14.9005592Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-04-12T00:46:14.9161969Z Reset branch 'master'
+2026-04-12T00:46:14.9164680Z branch 'master' set up to track 'origin/master'.
+2026-04-12T00:46:14.9171561Z ##[endgroup]
+2026-04-12T00:46:14.9208237Z [command]/usr/bin/git log -1 --format=%H
+2026-04-12T00:46:14.9229095Z 3834ebc9cfb7a9625dfacbb16f2da2227c195b1b
+2026-04-12T00:46:14.9477837Z ##[group]Run actions/setup-node@v4
+2026-04-12T00:46:14.9478409Z with:
+2026-04-12T00:46:14.9478807Z   node-version: 20
+2026-04-12T00:46:14.9479223Z   cache: npm
+2026-04-12T00:46:14.9479634Z   always-auth: false
+2026-04-12T00:46:14.9480066Z   check-latest: false
+2026-04-12T00:46:14.9480832Z   token: ***
+2026-04-12T00:46:14.9481235Z ##[endgroup]
+2026-04-12T00:46:15.1240412Z Found in cache @ /opt/hostedtoolcache/node/20.20.2/x64
+2026-04-12T00:46:15.1244471Z ##[group]Environment details
+2026-04-12T00:46:15.3940551Z node: v20.20.2
+2026-04-12T00:46:15.3941363Z npm: 10.8.2
+2026-04-12T00:46:15.3942266Z yarn: 1.22.22
+2026-04-12T00:46:15.3943599Z ##[endgroup]
+2026-04-12T00:46:15.3964974Z [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+2026-04-12T00:46:15.5136874Z /home/runner/.npm
+2026-04-12T00:46:15.6090884Z npm cache is not found
+2026-04-12T00:46:15.6242570Z ##[group]Run npm ci
+2026-04-12T00:46:15.6242960Z [36;1mnpm ci[0m
+2026-04-12T00:46:15.6277555Z shell: /usr/bin/bash -e {0}
+2026-04-12T00:46:15.6277873Z ##[endgroup]
+2026-04-12T00:46:23.5008022Z 
+2026-04-12T00:46:23.5017855Z added 377 packages, and audited 378 packages in 8s
+2026-04-12T00:46:23.5019771Z 
+2026-04-12T00:46:23.5020718Z 95 packages are looking for funding
+2026-04-12T00:46:23.5024225Z   run `npm fund` for details
+2026-04-12T00:46:23.5130210Z 
+2026-04-12T00:46:23.5131205Z 2 moderate severity vulnerabilities
+2026-04-12T00:46:23.5131989Z 
+2026-04-12T00:46:23.5132568Z To address all issues, run:
+2026-04-12T00:46:23.5133455Z   npm audit fix
+2026-04-12T00:46:23.5133995Z 
+2026-04-12T00:46:23.5134581Z Run `npm audit` for details.
+2026-04-12T00:46:23.5468001Z ##[group]Run npm run typecheck
+2026-04-12T00:46:23.5469033Z [36;1mnpm run typecheck[0m
+2026-04-12T00:46:23.5499551Z shell: /usr/bin/bash -e {0}
+2026-04-12T00:46:23.5500027Z ##[endgroup]
+2026-04-12T00:46:23.6661704Z 
+2026-04-12T00:46:23.6662648Z > devtools@1.0.0 typecheck
+2026-04-12T00:46:23.6756654Z > tsc -b
+2026-04-12T00:46:23.6757038Z 
+2026-04-12T00:46:31.5232440Z ##[group]Run npm run lint
+2026-04-12T00:46:31.5232723Z [36;1mnpm run lint[0m
+2026-04-12T00:46:31.5254254Z shell: /usr/bin/bash -e {0}
+2026-04-12T00:46:31.5254504Z ##[endgroup]
+2026-04-12T00:46:31.6369680Z 
+2026-04-12T00:46:31.6370909Z > devtools@1.0.0 lint
+2026-04-12T00:46:31.6371481Z > eslint .
+2026-04-12T00:46:31.6371674Z 
+2026-04-12T00:46:41.2845488Z 
+2026-04-12T00:46:41.2846664Z /home/runner/work/devtools/devtools/coverage/block-navigation.js
+2026-04-12T00:46:41.2848069Z   1:1  warning  Unused eslint-disable directive (no problems were reported)
+2026-04-12T00:46:41.2848710Z 
+2026-04-12T00:46:41.2849548Z /home/runner/work/devtools/devtools/coverage/prettify.js
+2026-04-12T00:46:41.2851176Z   1:1  warning  Unused eslint-disable directive (no problems were reported)
+2026-04-12T00:46:41.2851754Z 
+2026-04-12T00:46:41.2852190Z /home/runner/work/devtools/devtools/coverage/sorter.js
+2026-04-12T00:46:41.2853331Z   1:1  warning  Unused eslint-disable directive (no problems were reported)
+2026-04-12T00:46:41.2853928Z 
+2026-04-12T00:46:41.2854463Z /home/runner/work/devtools/devtools/src/components/base64/index.tsx
+2026-04-12T00:46:41.2855726Z   293:4  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.2856352Z 
+2026-04-12T00:46:41.2857970Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.2859902Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.2861536Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.2862403Z 
+2026-04-12T00:46:41.2863962Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.2865273Z 
+2026-04-12T00:46:41.2865849Z /home/runner/work/devtools/devtools/src/components/base64/index.tsx:293:4
+2026-04-12T00:46:41.2866573Z   291 | 	useEffect(() => {
+2026-04-12T00:46:41.2867309Z   292 | 		if (prefs.mode === "text-encode" || prefs.mode === "text-decode") {
+2026-04-12T00:46:41.2868032Z > 293 | 			processText(
+2026-04-12T00:46:41.2868647Z       | 			^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.2869272Z   294 | 				debouncedInput,
+2026-04-12T00:46:41.2869751Z   295 | 				prefs.mode,
+2026-04-12T00:46:41.2870748Z   296 | 				prefs.variant,                               react-hooks/set-state-in-effect
+2026-04-12T00:46:41.2872657Z   349:4  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.2873385Z 
+2026-04-12T00:46:41.2875356Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.2877396Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.2878830Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.2879673Z 
+2026-04-12T00:46:41.2881427Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.2882751Z 
+2026-04-12T00:46:41.2883330Z /home/runner/work/devtools/devtools/src/components/base64/index.tsx:349:4
+2026-04-12T00:46:41.2884047Z   347 | 	useEffect(() => {
+2026-04-12T00:46:41.2884707Z   348 | 		if (prefs.mode === "file-encode" && fileInfo) {
+2026-04-12T00:46:41.2885328Z > 349 | 			processFileEncode(
+2026-04-12T00:46:41.2885953Z       | 			^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.2887005Z   350 | 				fileInfo,
+2026-04-12T00:46:41.2887439Z   351 | 				prefs.variant,
+2026-04-12T00:46:41.2888210Z   352 | 				prefs.lineWrap,                                         react-hooks/set-state-in-effect
+2026-04-12T00:46:41.2889649Z   424:4  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.2890580Z 
+2026-04-12T00:46:41.2892436Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.2894447Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.2895783Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.2896643Z 
+2026-04-12T00:46:41.2898149Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.2899417Z 
+2026-04-12T00:46:41.2900003Z /home/runner/work/devtools/devtools/src/components/base64/index.tsx:424:4
+2026-04-12T00:46:41.2900974Z   422 | 	useEffect(() => {
+2026-04-12T00:46:41.2901466Z   423 | 		if (prefs.mode === "file-decode") {
+2026-04-12T00:46:41.2902270Z > 424 | 			processFileDecode(debouncedInput, prefs.variant);
+2026-04-12T00:46:41.2903090Z       | 			^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.2903722Z   425 | 		}
+2026-04-12T00:46:41.2904323Z   426 | 	}, [debouncedInput, prefs.mode, prefs.variant, processFileDecode]);
+2026-04-12T00:46:41.2905109Z   427 |  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.2905457Z 
+2026-04-12T00:46:41.2905964Z /home/runner/work/devtools/devtools/src/components/cron/index.tsx
+2026-04-12T00:46:41.2941812Z ##[error]  550:19  error  React Hook "useMemo" is called conditionally. React Hooks must be called in the exact same order in every component render      react-hooks/rules-of-hooks
+2026-04-12T00:46:41.2955152Z ##[error]  555:42  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render     react-hooks/rules-of-hooks
+2026-04-12T00:46:41.2959152Z ##[error]  557:23  error  React Hook "useCallback" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+2026-04-12T00:46:41.2961328Z 
+2026-04-12T00:46:41.2961895Z /home/runner/work/devtools/devtools/src/components/csv-json/index.tsx
+2026-04-12T00:46:41.2969402Z ##[error]  181:6  error  'text' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            prefer-const
+2026-04-12T00:46:41.2974526Z   543:3  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.2975263Z 
+2026-04-12T00:46:41.2977466Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.2979543Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.2981116Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.2981961Z 
+2026-04-12T00:46:41.2983531Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.2984848Z 
+2026-04-12T00:46:41.2985434Z /home/runner/work/devtools/devtools/src/components/csv-json/index.tsx:543:3
+2026-04-12T00:46:41.2986166Z   541 |
+2026-04-12T00:46:41.2986522Z   542 | 	useEffect(() => {
+2026-04-12T00:46:41.2987082Z > 543 | 		processInput(debouncedInput);
+2026-04-12T00:46:41.2987764Z       | 		^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.2988488Z   544 | 	}, [debouncedInput, processInput]);
+2026-04-12T00:46:41.2988996Z   545 |
+2026-04-12T00:46:41.2989635Z   546 | 	const handleClear = useCallback(() => {  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.2990455Z 
+2026-04-12T00:46:41.2990973Z /home/runner/work/devtools/devtools/src/components/diff/index.tsx
+2026-04-12T00:46:41.2993022Z ##[error]  31:9  error  Unexpected control character(s) in regular expression: \x00, \x08, \x0e, \x1f  no-control-regex
+2026-04-12T00:46:41.2994640Z 
+2026-04-12T00:46:41.2995155Z /home/runner/work/devtools/devtools/src/components/epoch/index.tsx
+2026-04-12T00:46:41.2996203Z   401:33  error  Error: Cannot call impure function during render
+2026-04-12T00:46:41.2996660Z 
+2026-04-12T00:46:41.2998997Z `Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+2026-04-12T00:46:41.3001134Z 
+2026-04-12T00:46:41.3001704Z /home/runner/work/devtools/devtools/src/components/epoch/index.tsx:401:33
+2026-04-12T00:46:41.3002711Z   399 | 	const [tzDropdownOpen, setTzDropdownOpen] = useState(false);
+2026-04-12T00:46:41.3003771Z   400 | 	const [comparatorDropdownOpen, setComparatorDropdownOpen] = useState(false);
+2026-04-12T00:46:41.3004743Z > 401 | 	const [now, setNow] = useState(Date.now());
+2026-04-12T00:46:41.3005473Z       | 	                               ^^^^^^^^^^ Cannot call impure function
+2026-04-12T00:46:41.3006002Z   402 |
+2026-04-12T00:46:41.3006565Z   403 | 	const tzDropdownRef = useRef<HTMLDivElement>(null);
+2026-04-12T00:46:41.3007834Z   404 | 	const comparatorDropdownRef = useRef<HTMLDivElement>(null);  react-hooks/purity
+2026-04-12T00:46:41.3008513Z 
+2026-04-12T00:46:41.3009033Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx
+2026-04-12T00:46:41.3010812Z   135:4  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+2026-04-12T00:46:41.3011830Z   607:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3012177Z 
+2026-04-12T00:46:41.3013540Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3014659Z 
+2026-04-12T00:46:41.3014989Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:607:4
+2026-04-12T00:46:41.3015418Z   605 | 	useMemo(() => {
+2026-04-12T00:46:41.3015701Z   606 | 		if (!debouncedInput.trim()) {
+2026-04-12T00:46:41.3016003Z > 607 | 			setOutput("");
+2026-04-12T00:46:41.3016295Z       | 			^^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3016598Z   608 | 			setError(null);
+2026-04-12T00:46:41.3016849Z   609 | 			setOperations([]);
+2026-04-12T00:46:41.3017496Z   610 | 			return;                                                                       react-hooks/set-state-in-render
+2026-04-12T00:46:41.3018297Z   608:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3018646Z 
+2026-04-12T00:46:41.3019998Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3021447Z 
+2026-04-12T00:46:41.3021788Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:608:4
+2026-04-12T00:46:41.3022283Z   606 | 		if (!debouncedInput.trim()) {
+2026-04-12T00:46:41.3022577Z   607 | 			setOutput("");
+2026-04-12T00:46:41.3022853Z > 608 | 			setError(null);
+2026-04-12T00:46:41.3023162Z       | 			^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3023477Z   609 | 			setOperations([]);
+2026-04-12T00:46:41.3023727Z   610 | 			return;
+2026-04-12T00:46:41.3024159Z   611 | 		}                                                                                     react-hooks/set-state-in-render
+2026-04-12T00:46:41.3024905Z   609:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3025244Z 
+2026-04-12T00:46:41.3026592Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3027707Z 
+2026-04-12T00:46:41.3028026Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:609:4
+2026-04-12T00:46:41.3028450Z   607 | 			setOutput("");
+2026-04-12T00:46:41.3028682Z   608 | 			setError(null);
+2026-04-12T00:46:41.3028973Z > 609 | 			setOperations([]);
+2026-04-12T00:46:41.3029288Z       | 			^^^^^^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3029592Z   610 | 			return;
+2026-04-12T00:46:41.3029802Z   611 | 		}
+2026-04-12T00:46:41.3030531Z   612 |                                                                                                                react-hooks/set-state-in-render
+2026-04-12T00:46:41.3031814Z   616:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3032159Z 
+2026-04-12T00:46:41.3033523Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3034854Z 
+2026-04-12T00:46:41.3035209Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:616:4
+2026-04-12T00:46:41.3035685Z   614 | 			const doc = parse(debouncedInput);
+2026-04-12T00:46:41.3036039Z   615 | 			const formatted = print(doc);
+2026-04-12T00:46:41.3036370Z > 616 | 			setOutput(formatted);
+2026-04-12T00:46:41.3036691Z       | 			^^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3036999Z   617 | 			setError(null);
+2026-04-12T00:46:41.3037306Z   618 | 			setOperations(extractOperations(doc));
+2026-04-12T00:46:41.3037741Z   619 | 		} catch (e) {                 react-hooks/set-state-in-render
+2026-04-12T00:46:41.3038404Z   617:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3038739Z 
+2026-04-12T00:46:41.3040084Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3041472Z 
+2026-04-12T00:46:41.3041953Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:617:4
+2026-04-12T00:46:41.3042451Z   615 | 			const formatted = print(doc);
+2026-04-12T00:46:41.3042770Z   616 | 			setOutput(formatted);
+2026-04-12T00:46:41.3043047Z > 617 | 			setError(null);
+2026-04-12T00:46:41.3043352Z       | 			^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3043720Z   618 | 			setOperations(extractOperations(doc));
+2026-04-12T00:46:41.3044023Z   619 | 		} catch (e) {
+2026-04-12T00:46:41.3044447Z   620 | 			const err = e as Error & {                          react-hooks/set-state-in-render
+2026-04-12T00:46:41.3045203Z   618:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3045533Z 
+2026-04-12T00:46:41.3046872Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3047978Z 
+2026-04-12T00:46:41.3048470Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:618:4
+2026-04-12T00:46:41.3048912Z   616 | 			setOutput(formatted);
+2026-04-12T00:46:41.3049173Z   617 | 			setError(null);
+2026-04-12T00:46:41.3049527Z > 618 | 			setOperations(extractOperations(doc));
+2026-04-12T00:46:41.3049905Z       | 			^^^^^^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3050432Z   619 | 		} catch (e) {
+2026-04-12T00:46:41.3050726Z   620 | 			const err = e as Error & {
+2026-04-12T00:46:41.3051232Z   621 | 				locations?: { line: number; column: number }[];  react-hooks/set-state-in-render
+2026-04-12T00:46:41.3051994Z   625:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3052330Z 
+2026-04-12T00:46:41.3053682Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3054808Z 
+2026-04-12T00:46:41.3055125Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:625:4
+2026-04-12T00:46:41.3055603Z   623 | 			const loc = err.locations?.[0];
+2026-04-12T00:46:41.3056292Z   624 | 			const prefix = loc ? `Line ${loc.line}:${loc.column} — ` : "";
+2026-04-12T00:46:41.3056747Z > 625 | 			setError(`${prefix}${err.message}`);
+2026-04-12T00:46:41.3057128Z       | 			^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3057657Z   626 | 			setOutput("");
+2026-04-12T00:46:41.3057916Z   627 | 			setOperations([]);
+2026-04-12T00:46:41.3058224Z   628 | 		}      react-hooks/set-state-in-render
+2026-04-12T00:46:41.3058838Z   626:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3059168Z 
+2026-04-12T00:46:41.3060788Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3061927Z 
+2026-04-12T00:46:41.3062263Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:626:4
+2026-04-12T00:46:41.3062949Z   624 | 			const prefix = loc ? `Line ${loc.line}:${loc.column} — ` : "";
+2026-04-12T00:46:41.3063386Z   625 | 			setError(`${prefix}${err.message}`);
+2026-04-12T00:46:41.3063703Z > 626 | 			setOutput("");
+2026-04-12T00:46:41.3064011Z       | 			^^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3064331Z   627 | 			setOperations([]);
+2026-04-12T00:46:41.3064579Z   628 | 		}
+2026-04-12T00:46:41.3064919Z   629 | 	}, [debouncedInput]);                 react-hooks/set-state-in-render
+2026-04-12T00:46:41.3065794Z   627:4  error    Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3066167Z 
+2026-04-12T00:46:41.3067510Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3068621Z 
+2026-04-12T00:46:41.3068950Z /home/runner/work/devtools/devtools/src/components/graphql/index.tsx:627:4
+2026-04-12T00:46:41.3069426Z   625 | 			setError(`${prefix}${err.message}`);
+2026-04-12T00:46:41.3069737Z   626 | 			setOutput("");
+2026-04-12T00:46:41.3070004Z > 627 | 			setOperations([]);
+2026-04-12T00:46:41.3070605Z       | 			^^^^^^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3070928Z   628 | 		}
+2026-04-12T00:46:41.3071156Z   629 | 	}, [debouncedInput]);
+2026-04-12T00:46:41.3071599Z   630 |                                                                               react-hooks/set-state-in-render
+2026-04-12T00:46:41.3071910Z 
+2026-04-12T00:46:41.3072213Z /home/runner/work/devtools/devtools/src/components/hash/index.test.tsx
+2026-04-12T00:46:41.3073269Z ##[error]  9:9   error  '_algorithm' is defined but never used  @typescript-eslint/no-unused-vars
+2026-04-12T00:46:41.3074726Z ##[error]  9:42  error  '_data' is defined but never used       @typescript-eslint/no-unused-vars
+2026-04-12T00:46:41.3075596Z 
+2026-04-12T00:46:41.3075889Z /home/runner/work/devtools/devtools/src/components/hash/index.tsx
+2026-04-12T00:46:41.3082198Z ##[warning]  375:17  warning  The ref value 'fileAbortRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'fileAbortRef.current' to a variable inside the effect, and use that variable in the cleanup function                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+2026-04-12T00:46:41.3090561Z ##[warning]  376:24  warning  The ref value 'compareFileAbortRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'compareFileAbortRef.current' to a variable inside the effect, and use that variable in the cleanup function                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+2026-04-12T00:46:41.3094103Z   385:4   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3094537Z 
+2026-04-12T00:46:41.3095767Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3096928Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3097727Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3098205Z 
+2026-04-12T00:46:41.3099047Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3099781Z 
+2026-04-12T00:46:41.3100094Z /home/runner/work/devtools/devtools/src/components/hash/index.tsx:385:4
+2026-04-12T00:46:41.3100882Z   383 | 		if (mode !== "text") return;
+2026-04-12T00:46:41.3101209Z   384 | 		if (!debouncedInput.trim()) {
+2026-04-12T00:46:41.3101566Z > 385 | 			setHashes(new Map());
+2026-04-12T00:46:41.3101943Z       | 			^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3102285Z   386 | 			return;
+2026-04-12T00:46:41.3102500Z   387 | 		}
+2026-04-12T00:46:41.3102809Z   388 |                                       react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3103597Z   404:4   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3104027Z 
+2026-04-12T00:46:41.3105060Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3106173Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3106927Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3107418Z 
+2026-04-12T00:46:41.3108267Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3108995Z 
+2026-04-12T00:46:41.3109306Z /home/runner/work/devtools/devtools/src/components/hash/index.tsx:404:4
+2026-04-12T00:46:41.3109810Z   402 | 		if (mode !== "text" || !compareMode) return;
+2026-04-12T00:46:41.3110454Z   403 | 		if (!debouncedCompareInput.trim()) {
+2026-04-12T00:46:41.3111107Z > 404 | 			setCompareHashes(new Map());
+2026-04-12T00:46:41.3111830Z       | 			^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3112440Z   405 | 			return;
+2026-04-12T00:46:41.3113010Z   406 | 		}
+2026-04-12T00:46:41.3113423Z   407 |  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3113797Z 
+2026-04-12T00:46:41.3114343Z /home/runner/work/devtools/devtools/src/components/json-diff/index.tsx
+2026-04-12T00:46:41.3115116Z   493:3  error  Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3115465Z 
+2026-04-12T00:46:41.3116820Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3117931Z 
+2026-04-12T00:46:41.3118257Z /home/runner/work/devtools/devtools/src/components/json-diff/index.tsx:493:3
+2026-04-12T00:46:41.3118673Z   491 |
+2026-04-12T00:46:41.3119007Z   492 | 	const { entries, stats, leftObj, rightObj } = useMemo(() => {
+2026-04-12T00:46:41.3119404Z > 493 | 		setError(null);
+2026-04-12T00:46:41.3119708Z       | 		^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3120000Z   494 |
+2026-04-12T00:46:41.3120343Z   495 | 		const empty = {
+2026-04-12T00:46:41.3120738Z   496 | 			entries: [] as DiffEntry[],        react-hooks/set-state-in-render
+2026-04-12T00:46:41.3121393Z   511:4  error  Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3121878Z 
+2026-04-12T00:46:41.3123256Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3124362Z 
+2026-04-12T00:46:41.3124690Z /home/runner/work/devtools/devtools/src/components/json-diff/index.tsx:511:4
+2026-04-12T00:46:41.3125203Z   509 | 			parsedLeft = JSON.parse(debouncedLeft);
+2026-04-12T00:46:41.3125523Z   510 | 		} catch (e) {
+2026-04-12T00:46:41.3125894Z > 511 | 			setError(`Left panel: ${(e as Error).message}`);
+2026-04-12T00:46:41.3126302Z       | 			^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3126608Z   512 | 			return empty;
+2026-04-12T00:46:41.3126825Z   513 | 		}
+2026-04-12T00:46:41.3127075Z   514 |     react-hooks/set-state-in-render
+2026-04-12T00:46:41.3127631Z   518:4  error  Error: Calling setState from useMemo may trigger an infinite loop
+2026-04-12T00:46:41.3127955Z 
+2026-04-12T00:46:41.3129288Z Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+2026-04-12T00:46:41.3130604Z 
+2026-04-12T00:46:41.3130935Z /home/runner/work/devtools/devtools/src/components/json-diff/index.tsx:518:4
+2026-04-12T00:46:41.3131447Z   516 | 			parsedRight = JSON.parse(debouncedRight);
+2026-04-12T00:46:41.3131760Z   517 | 		} catch (e) {
+2026-04-12T00:46:41.3132114Z > 518 | 			setError(`Right panel: ${(e as Error).message}`);
+2026-04-12T00:46:41.3132513Z       | 			^^^^^^^^ Found setState() within useMemo()
+2026-04-12T00:46:41.3132810Z   519 | 			return empty;
+2026-04-12T00:46:41.3133031Z   520 | 		}
+2026-04-12T00:46:41.3133279Z   521 |  react-hooks/set-state-in-render
+2026-04-12T00:46:41.3133474Z 
+2026-04-12T00:46:41.3133804Z /home/runner/work/devtools/devtools/src/components/layout/ThemeProvider.tsx
+2026-04-12T00:46:41.3135547Z ##[error]  38:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+2026-04-12T00:46:41.3136821Z 
+2026-04-12T00:46:41.3137125Z /home/runner/work/devtools/devtools/src/components/regex/index.tsx
+2026-04-12T00:46:41.3137881Z   329:3  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3138542Z 
+2026-04-12T00:46:41.3139603Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3140960Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3141718Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3142222Z 
+2026-04-12T00:46:41.3143071Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3143788Z 
+2026-04-12T00:46:41.3144129Z /home/runner/work/devtools/devtools/src/components/regex/index.tsx:329:3
+2026-04-12T00:46:41.3144665Z   327 | 	// -- Worker-based regex execution with 2s timeout --
+2026-04-12T00:46:41.3145018Z   328 | 	useEffect(() => {
+2026-04-12T00:46:41.3145348Z > 329 | 		setBacktrackingWarning(false);
+2026-04-12T00:46:41.3145779Z       | 		^^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3146137Z   330 |
+2026-04-12T00:46:41.3146370Z   331 | 		if (!debouncedPattern) {
+2026-04-12T00:46:41.3146733Z   332 | 			setMatches([]);  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3147177Z 
+2026-04-12T00:46:41.3147516Z /home/runner/work/devtools/devtools/src/components/sql-formatter/index.tsx
+2026-04-12T00:46:41.3148321Z   202:3  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3148725Z 
+2026-04-12T00:46:41.3149782Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3151036Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3151796Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3152278Z 
+2026-04-12T00:46:41.3153128Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3153864Z 
+2026-04-12T00:46:41.3154213Z /home/runner/work/devtools/devtools/src/components/sql-formatter/index.tsx:202:3
+2026-04-12T00:46:41.3154656Z   200 |
+2026-04-12T00:46:41.3154846Z   201 | 	useEffect(() => {
+2026-04-12T00:46:41.3155178Z > 202 | 		processInput(debouncedInput);
+2026-04-12T00:46:41.3155588Z       | 		^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3156018Z   203 | 	}, [debouncedInput, processInput]);
+2026-04-12T00:46:41.3156297Z   204 |
+2026-04-12T00:46:41.3156673Z   205 | 	const handleFormat = useCallback(() => {  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3157013Z 
+2026-04-12T00:46:41.3157357Z /home/runner/work/devtools/devtools/src/components/sql-visualizer/index.tsx
+2026-04-12T00:46:41.3157958Z   765:25  error  Error: Cannot call impure function during render
+2026-04-12T00:46:41.3158234Z 
+2026-04-12T00:46:41.3159504Z `Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+2026-04-12T00:46:41.3160705Z 
+2026-04-12T00:46:41.3161067Z /home/runner/work/devtools/devtools/src/components/sql-visualizer/index.tsx:765:25
+2026-04-12T00:46:41.3161583Z   763 | 	const activeFill = "rgba(251,146,60,0.4)";
+2026-04-12T00:46:41.3161952Z   764 | 	const inactiveFill = "rgba(63,63,70,0.3)";
+2026-04-12T00:46:41.3162454Z > 765 | 	const clipId = `venn-${Math.random().toString(36).slice(2, 8)}`;
+2026-04-12T00:46:41.3162927Z       | 	                       ^^^^^^^^^^^^^ Cannot call impure function
+2026-04-12T00:46:41.3163420Z   766 |
+2026-04-12T00:46:41.3163660Z   767 | 	if (upper.includes("CROSS")) {
+2026-04-12T00:46:41.3163981Z   768 | 		return (  react-hooks/purity
+2026-04-12T00:46:41.3164185Z 
+2026-04-12T00:46:41.3164452Z /home/runner/work/devtools/devtools/src/components/url/index.tsx
+2026-04-12T00:46:41.3168971Z ##[error]  198:8   error  Unexpected control character(s) in regular expression: \x00                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    no-control-regex
+2026-04-12T00:46:41.3175608Z ##[error]  241:28  error  Unexpected control character(s) in regular expression: \x00                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    no-control-regex
+2026-04-12T00:46:41.3182139Z ##[error]  310:14  error  Unexpected control character(s) in regular expression: \x00                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    no-control-regex
+2026-04-12T00:46:41.3189210Z ##[error]  370:6   error  Unexpected control character(s) in regular expression: \x00                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    no-control-regex
+2026-04-12T00:46:41.3192565Z   452:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3193008Z 
+2026-04-12T00:46:41.3194056Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3195176Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3196096Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3196588Z 
+2026-04-12T00:46:41.3197439Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3198181Z 
+2026-04-12T00:46:41.3198485Z /home/runner/work/devtools/devtools/src/components/url/index.tsx:452:5
+2026-04-12T00:46:41.3199011Z   450 | 		if (prefs.mode === "parse" || prefs.mode === "builder") {
+2026-04-12T00:46:41.3199463Z   451 | 			if (prefs.mode === "parse" && urlComponents) {
+2026-04-12T00:46:41.3199861Z > 452 | 				setError(urlComponents.error);
+2026-04-12T00:46:41.3200423Z       | 				^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3200784Z   453 | 				setOutput("");
+2026-04-12T00:46:41.3201026Z   454 | 			}
+2026-04-12T00:46:41.3201376Z   455 | 			if (prefs.mode === "builder") {  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3201683Z 
+2026-04-12T00:46:41.3201955Z /home/runner/work/devtools/devtools/src/components/xml/index.tsx
+2026-04-12T00:46:41.3202720Z   974:3  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3203122Z 
+2026-04-12T00:46:41.3204190Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3205317Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3206061Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3206535Z 
+2026-04-12T00:46:41.3207379Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3208092Z 
+2026-04-12T00:46:41.3208394Z /home/runner/work/devtools/devtools/src/components/xml/index.tsx:974:3
+2026-04-12T00:46:41.3208777Z   972 |
+2026-04-12T00:46:41.3208988Z   973 | 	useEffect(() => {
+2026-04-12T00:46:41.3209291Z > 974 | 		processInput(debouncedInput);
+2026-04-12T00:46:41.3209698Z       | 		^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3210098Z   975 | 	}, [debouncedInput, processInput]);
+2026-04-12T00:46:41.3210511Z   976 |
+2026-04-12T00:46:41.3210881Z   977 | 	const handleFormat = useCallback(() => {  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3211386Z 
+2026-04-12T00:46:41.3211694Z /home/runner/work/devtools/devtools/src/components/yaml-json/index.tsx
+2026-04-12T00:46:41.3216211Z ##[error]   48:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3223255Z ##[error]   60:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3230030Z ##[error]   82:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3236788Z ##[error]  105:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3243555Z ##[error]  109:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3250145Z ##[error]  126:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3256740Z ##[error]  141:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3263468Z ##[error]  168:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3270607Z ##[error]  188:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-refresh/only-export-components
+2026-04-12T00:46:41.3273706Z   363:3   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+2026-04-12T00:46:41.3274130Z 
+2026-04-12T00:46:41.3275211Z Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+2026-04-12T00:46:41.3276334Z * Update external systems with the latest state from React.
+2026-04-12T00:46:41.3277037Z * Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+2026-04-12T00:46:41.3277494Z 
+2026-04-12T00:46:41.3278374Z Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+2026-04-12T00:46:41.3279152Z 
+2026-04-12T00:46:41.3279500Z /home/runner/work/devtools/devtools/src/components/yaml-json/index.tsx:363:3
+2026-04-12T00:46:41.3279957Z   361 |
+2026-04-12T00:46:41.3280317Z   362 | 	useEffect(() => {
+2026-04-12T00:46:41.3280638Z > 363 | 		processInput(debouncedInput);
+2026-04-12T00:46:41.3281055Z       | 		^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+2026-04-12T00:46:41.3281489Z   364 | 	}, [debouncedInput, processInput]);
+2026-04-12T00:46:41.3281787Z   365 |
+2026-04-12T00:46:41.3282178Z   366 | 	const handleSwap = useCallback(() => {  react-hooks/set-state-in-effect
+2026-04-12T00:46:41.3282522Z 
+2026-04-12T00:46:41.3282758Z /home/runner/work/devtools/devtools/src/lib/utils.test.ts
+2026-04-12T00:46:41.3283993Z ##[error]  10:23  error  Unexpected constant truthiness on the left-hand side of a `&&` expression  no-constant-binary-expression
+2026-04-12T00:46:41.3285248Z 
+2026-04-12T00:46:41.3285511Z /home/runner/work/devtools/devtools/src/routes/__root.tsx
+2026-04-12T00:46:41.3287237Z ##[error]  11:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3288872Z 
+2026-04-12T00:46:41.3289128Z /home/runner/work/devtools/devtools/src/routes/base64.tsx
+2026-04-12T00:46:41.3291025Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3292433Z 
+2026-04-12T00:46:41.3292706Z /home/runner/work/devtools/devtools/src/routes/color.tsx
+2026-04-12T00:46:41.3294471Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3295833Z 
+2026-04-12T00:46:41.3296093Z /home/runner/work/devtools/devtools/src/routes/cron.tsx
+2026-04-12T00:46:41.3297833Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3299137Z 
+2026-04-12T00:46:41.3299376Z /home/runner/work/devtools/devtools/src/routes/csv-json.tsx
+2026-04-12T00:46:41.3301322Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3302676Z 
+2026-04-12T00:46:41.3302907Z /home/runner/work/devtools/devtools/src/routes/diff.tsx
+2026-04-12T00:46:41.3304563Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3305824Z 
+2026-04-12T00:46:41.3306034Z /home/runner/work/devtools/devtools/src/routes/env.tsx
+2026-04-12T00:46:41.3307729Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3309097Z 
+2026-04-12T00:46:41.3309367Z /home/runner/work/devtools/devtools/src/routes/epoch.tsx
+2026-04-12T00:46:41.3311317Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3312725Z 
+2026-04-12T00:46:41.3313005Z /home/runner/work/devtools/devtools/src/routes/graphql.tsx
+2026-04-12T00:46:41.3314793Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3316171Z 
+2026-04-12T00:46:41.3316435Z /home/runner/work/devtools/devtools/src/routes/hash.tsx
+2026-04-12T00:46:41.3318203Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3319567Z 
+2026-04-12T00:46:41.3319880Z /home/runner/work/devtools/devtools/src/routes/http-status.tsx
+2026-04-12T00:46:41.3321833Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3323224Z 
+2026-04-12T00:46:41.3323487Z /home/runner/work/devtools/devtools/src/routes/index.tsx
+2026-04-12T00:46:41.3325277Z ##[error]  15:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3328373Z ##[error]  97:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3329735Z 
+2026-04-12T00:46:41.3330026Z /home/runner/work/devtools/devtools/src/routes/json-diff.tsx
+2026-04-12T00:46:41.3331774Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3332967Z 
+2026-04-12T00:46:41.3333179Z /home/runner/work/devtools/devtools/src/routes/json.tsx
+2026-04-12T00:46:41.3334683Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3335847Z 
+2026-04-12T00:46:41.3336055Z /home/runner/work/devtools/devtools/src/routes/jwt.tsx
+2026-04-12T00:46:41.3337773Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3339409Z 
+2026-04-12T00:46:41.3339721Z /home/runner/work/devtools/devtools/src/routes/mock-api.tsx
+2026-04-12T00:46:41.3341786Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3343203Z 
+2026-04-12T00:46:41.3343455Z /home/runner/work/devtools/devtools/src/routes/regex.tsx
+2026-04-12T00:46:41.3345246Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3346615Z 
+2026-04-12T00:46:41.3346915Z /home/runner/work/devtools/devtools/src/routes/sql-formatter.tsx
+2026-04-12T00:46:41.3348729Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3350292Z 
+2026-04-12T00:46:41.3350671Z /home/runner/work/devtools/devtools/src/routes/sql-visualizer.tsx
+2026-04-12T00:46:41.3352806Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3354409Z 
+2026-04-12T00:46:41.3354692Z /home/runner/work/devtools/devtools/src/routes/url.tsx
+2026-04-12T00:46:41.3356721Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3358328Z 
+2026-04-12T00:46:41.3358543Z /home/runner/work/devtools/devtools/src/routes/uuid.tsx
+2026-04-12T00:46:41.3360120Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3361522Z 
+2026-04-12T00:46:41.3361750Z /home/runner/work/devtools/devtools/src/routes/xml.tsx
+2026-04-12T00:46:41.3364858Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3366537Z 
+2026-04-12T00:46:41.3366996Z /home/runner/work/devtools/devtools/src/routes/yaml-json.tsx
+2026-04-12T00:46:41.3368660Z ##[error]  8:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+2026-04-12T00:46:41.3369867Z 
+2026-04-12T00:46:41.3370594Z ✖ 77 problems (71 errors, 6 warnings)
+2026-04-12T00:46:41.3371364Z   1 error and 4 warnings potentially fixable with the `--fix` option.
+2026-04-12T00:46:41.3371680Z 
+2026-04-12T00:46:41.3507871Z ##[error]Process completed with exit code 1.
+2026-04-12T00:46:41.3614587Z Post job cleanup.
+2026-04-12T00:46:41.4566416Z [command]/usr/bin/git version
+2026-04-12T00:46:41.4602726Z git version 2.53.0
+2026-04-12T00:46:41.4647825Z Temporarily overriding HOME='/home/runner/work/_temp/51819e92-12c3-4b55-a301-3a5064cfc4d5' before making global git config changes
+2026-04-12T00:46:41.4649416Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-12T00:46:41.4654716Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/devtools/devtools
+2026-04-12T00:46:41.4690738Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-12T00:46:41.4738688Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-12T00:46:41.4950269Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-12T00:46:41.4971457Z http.https://github.com/.extraheader
+2026-04-12T00:46:41.4985439Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-04-12T00:46:41.5018894Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-12T00:46:41.5252469Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-12T00:46:41.5284878Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-12T00:46:41.5624409Z Cleaning up orphan processes
+2026-04-12T00:46:41.5985684Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/setup-node@v4. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

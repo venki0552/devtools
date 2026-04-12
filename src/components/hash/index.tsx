@@ -371,9 +371,11 @@ export function HashTool() {
 
 	// Cleanup on unmount
 	useEffect(() => {
+		const fileAbort = fileAbortRef.current;
+		const compareFileAbort = compareFileAbortRef.current;
 		return () => {
-			fileAbortRef.current?.abort();
-			compareFileAbortRef.current?.abort();
+			fileAbort?.abort();
+			compareFileAbort?.abort();
 		};
 	}, []);
 

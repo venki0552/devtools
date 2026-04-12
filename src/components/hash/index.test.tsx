@@ -5,16 +5,14 @@ import { renderWithProviders } from "@/test/utils";
 import { HashTool } from "./index";
 
 // Mock crypto.subtle.digest for jsdom environment
-const mockDigest = vi.fn(
-	async (_algorithm: AlgorithmIdentifier, _data: BufferSource) => {
-		// Return a deterministic 32-byte buffer for testing
-		const result = new Uint8Array(32);
-		for (let i = 0; i < 32; i++) {
-			result[i] = i;
-		}
-		return result.buffer;
-	},
-);
+const mockDigest = vi.fn(async () => {
+	// Return a deterministic 32-byte buffer for testing
+	const result = new Uint8Array(32);
+	for (let i = 0; i < 32; i++) {
+		result[i] = i;
+	}
+	return result.buffer;
+});
 
 // Only mock if subtle doesn't work properly in test env
 if (!globalThis.crypto?.subtle?.digest) {

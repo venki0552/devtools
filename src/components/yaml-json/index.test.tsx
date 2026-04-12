@@ -3,8 +3,8 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { screen, fireEvent } from "@testing-library/react";
 import { act } from "react";
 import { renderWithProviders } from "@/test/utils";
+import { YamlJsonTool } from "./index";
 import {
-	YamlJsonTool,
 	sortKeysDeep,
 	applyNumberHandling,
 	applyNullHandling,
@@ -14,7 +14,7 @@ import {
 	yamlToJson,
 	jsonToYaml,
 	checkRoundTrip,
-} from "./index";
+} from "./utils";
 
 beforeEach(() => {
 	vi.useFakeTimers();

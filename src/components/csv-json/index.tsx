@@ -178,7 +178,7 @@ function csvToJson(
 	json: string;
 	stats: ConversionStats;
 } {
-	let text = stripBom(input);
+	const text = stripBom(input);
 	const allLines = text.split(/\r?\n/);
 	const lines = prefs.skipEmptyRows
 		? allLines.filter((l) => l.trim() !== "")

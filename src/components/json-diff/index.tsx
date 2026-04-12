@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -489,14 +489,13 @@ export function JsonDiffTool() {
 
 	const diffpatcher = useMemo(() => createDiffPatcher(arrayKeys), [arrayKeys]);
 
-	const { entries, stats, leftObj, rightObj } = useMemo(() => {
-		setError(null);
-
+	const { entries, stats, leftObj, rightObj, parseError } = useMemo(() => {
 		const empty = {
 			entries: [] as DiffEntry[],
 			stats: { added: 0, removed: 0, changed: 0, unchanged: 0 },
 			leftObj: undefined as unknown,
 			rightObj: undefined as unknown,
+			parseError: null as string | null,
 		};
 
 		if (!debouncedLeft.trim() && !debouncedRight.trim()) return empty;
@@ -508,15 +507,13 @@ export function JsonDiffTool() {
 		try {
 			parsedLeft = JSON.parse(debouncedLeft);
 		} catch (e) {
-			setError(`Left panel: ${(e as Error).message}`);
-			return empty;
+			return { ...empty, parseError: `Left panel: ${(e as Error).message}` };
 		}
 
 		try {
 			parsedRight = JSON.parse(debouncedRight);
 		} catch (e) {
-			setError(`Right panel: ${(e as Error).message}`);
-			return empty;
+			return { ...empty, parseError: `Right panel: ${(e as Error).message}` };
 		}
 
 		const delta = diffpatcher.diff(parsedLeft, parsedRight);
@@ -531,6 +528,7 @@ export function JsonDiffTool() {
 				stats: { added: 0, removed: 0, changed: 0, unchanged: total },
 				leftObj: parsedLeft,
 				rightObj: parsedRight,
+				parseError: null,
 			};
 		}
 
@@ -545,8 +543,13 @@ export function JsonDiffTool() {
 			stats: { added, removed, changed, unchanged },
 			leftObj: parsedLeft,
 			rightObj: parsedRight,
+			parseError: null,
 		};
 	}, [debouncedLeft, debouncedRight, diffpatcher]);
+
+	useEffect(() => {
+		setError(parseError);
+	}, [parseError]);
 
 	const unchangedEntries = useMemo(
 		() => (leftObj && rightObj ? getUnchangedEntries(leftObj, rightObj) : []),

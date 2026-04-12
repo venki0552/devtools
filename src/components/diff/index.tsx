@@ -28,6 +28,7 @@ const SIZE_LIMIT = 100 * 1024; // 100KB
 /* ---------- Utility functions ---------- */
 
 function detectBinary(text: string): boolean {
+	// eslint-disable-next-line no-control-regex
 	return /[\x00-\x08\x0E-\x1F]/.test(text);
 }
 

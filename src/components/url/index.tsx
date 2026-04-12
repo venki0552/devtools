@@ -195,6 +195,7 @@ function idnToAscii(host: string): string {
 	return host
 		.split(".")
 		.map((label) => {
+			// eslint-disable-next-line no-control-regex
 			if (/[^\x00-\x7F]/.test(label)) return "xn--" + punycodeEncode(label);
 			return label;
 		})
@@ -238,6 +239,7 @@ function encodeUrl(
 
 		if (filter === "non-ascii") {
 			// Only keep encoding for non-ASCII chars, restore ASCII-safe encodings
+			// eslint-disable-next-line no-control-regex
 			encoded = input.replace(/[^\x00-\x7F]/g, (ch) => encodeURIComponent(ch));
 		} else if (filter === "special") {
 			// Encode only URL-special characters
@@ -308,6 +310,7 @@ function parseUrl(input: string): {
 			idnPunycode = hostForIDN;
 			idnUnicode = idnToUnicode(hostForIDN);
 		} else if (/[^\x00-\x7F]/.test(hostForIDN)) {
+			// eslint-disable-line no-control-regex
 			idnUnicode = hostForIDN;
 			idnPunycode = idnToAscii(hostForIDN);
 		}
@@ -367,6 +370,7 @@ function buildUrl(state: BuilderState): { url: string; error: string | null } {
 
 	let host = state.host.trim();
 	// Auto-encode IDN hostnames
+	// eslint-disable-next-line no-control-regex
 	if (/[^\x00-\x7F]/.test(host)) {
 		host = idnToAscii(host);
 	}

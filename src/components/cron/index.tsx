@@ -525,21 +525,9 @@ function FieldGridEditor({
 			cellLabels![i] = name;
 		});
 	} else if (label === "Year") {
-		return (
-			<div className='space-y-2'>
-				<div className='text-[10px] font-semibold text-muted-foreground'>
-					Year
-				</div>
-				<input
-					type='text'
-					value={fieldValue}
-					onChange={(e) => onChange(e.target.value)}
-					placeholder='* or 2024 or 2024-2030'
-					className='w-full rounded border border-border bg-zinc-800 px-2 py-1 font-mono text-xs text-foreground'
-					aria-label='Year field'
-				/>
-			</div>
-		);
+		min = 0;
+		max = 9999;
+		cols = 1;
 	}
 
 	const isEvery = fieldValue === "*";
@@ -563,6 +551,24 @@ function FieldGridEditor({
 		},
 		[selected, hasLast, onChange],
 	);
+
+	if (label === "Year") {
+		return (
+			<div className='space-y-2'>
+				<div className='text-[10px] font-semibold text-muted-foreground'>
+					Year
+				</div>
+				<input
+					type='text'
+					value={fieldValue}
+					onChange={(e) => onChange(e.target.value)}
+					placeholder='* or 2024 or 2024-2030'
+					className='w-full rounded border border-border bg-zinc-800 px-2 py-1 font-mono text-xs text-foreground'
+					aria-label='Year field'
+				/>
+			</div>
+		);
+	}
 
 	const rangeLabel =
 		label === "Month"

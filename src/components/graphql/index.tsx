@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -132,7 +132,6 @@ function collectDirectives(node: any): string[] {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function walk(n: any) {
 		if (n.directives) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			for (const d of n.directives) {
 				let str = `@${d.name.value}`;
 				if (d.arguments?.length) {
@@ -602,7 +601,7 @@ function QueryFormatter({
 
 	const debouncedInput = useDebounce(input, 300);
 
-	useMemo(() => {
+	useEffect(() => {
 		if (!debouncedInput.trim()) {
 			setOutput("");
 			setError(null);

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useId } from "react";
 import { Helmet } from "react-helmet-async";
 import {
 	Database,
@@ -762,7 +762,7 @@ function VennSvg({ joinType }: { joinType: string }) {
 	const inactive = "#3f3f46";
 	const activeFill = "rgba(251,146,60,0.4)";
 	const inactiveFill = "rgba(63,63,70,0.3)";
-	const clipId = `venn-${Math.random().toString(36).slice(2, 8)}`;
+	const clipId = useId();
 
 	if (upper.includes("CROSS")) {
 		return (

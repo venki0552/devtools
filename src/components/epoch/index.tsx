@@ -398,7 +398,7 @@ export function EpochTool() {
 	const [comparatorTzSearch, setComparatorTzSearch] = useState("");
 	const [tzDropdownOpen, setTzDropdownOpen] = useState(false);
 	const [comparatorDropdownOpen, setComparatorDropdownOpen] = useState(false);
-	const [now, setNow] = useState(Date.now());
+	const [now, setNow] = useState(() => Date.now());
 
 	const tzDropdownRef = useRef<HTMLDivElement>(null);
 	const comparatorDropdownRef = useRef<HTMLDivElement>(null);
