@@ -395,13 +395,17 @@ export function Base64Tool() {
 				}
 				bytes = base64ToBytes(text, variant);
 			}
-			setDecodedFileBlob(new Blob([bytes as Uint8Array<ArrayBuffer>], { type: mime }));
+			setDecodedFileBlob(
+				new Blob([bytes as Uint8Array<ArrayBuffer>], { type: mime }),
+			);
 			setDecodedMime(mime);
 			setDecodedSize(bytes.length);
 			setOutput(`Decoded: ${formatBytes(bytes.length)} (${mime})`);
 			setError(null);
 			if (isImageMime(mime)) {
-				const url = URL.createObjectURL(new Blob([bytes as Uint8Array<ArrayBuffer>], { type: mime }));
+				const url = URL.createObjectURL(
+					new Blob([bytes as Uint8Array<ArrayBuffer>], { type: mime }),
+				);
 				setPreviewUrl(url);
 			} else {
 				setPreviewUrl(null);

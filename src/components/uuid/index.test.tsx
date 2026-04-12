@@ -179,9 +179,7 @@ describe("UuidTool", () => {
 
 	it("regenerate button generates a new UUID", () => {
 		renderWithProviders(<UuidTool />);
-		screen.getByText((content) =>
-			UUID_V4_REGEX.test(content),
-		);
+		screen.getByText((content) => UUID_V4_REGEX.test(content));
 
 		fireEvent.click(screen.getByLabelText("Regenerate"));
 		const second = screen.getByText((content) =>
@@ -311,9 +309,7 @@ describe("UuidTool", () => {
 
 	it("Ctrl+Enter triggers regenerate", () => {
 		renderWithProviders(<UuidTool />);
-		screen.getByText((content) =>
-			UUID_V4_REGEX.test(content),
-		);
+		screen.getByText((content) => UUID_V4_REGEX.test(content));
 
 		fireEvent.keyDown(window, { key: "Enter", ctrlKey: true });
 
