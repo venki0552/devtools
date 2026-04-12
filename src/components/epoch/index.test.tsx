@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { screen, fireEvent, within } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { act } from "react";
 import { renderWithProviders } from "@/test/utils";
 import { EpochTool } from "./index";

@@ -106,7 +106,7 @@ describe("SqlFormatterTool", () => {
 
 	it("different dialects are available", () => {
 		renderWithProviders(<SqlFormatterTool />);
-		const select = screen.getByLabelText("SQL dialect");
+		screen.getByLabelText("SQL dialect");
 		expect(screen.getByText("Standard SQL")).toBeInTheDocument();
 		expect(screen.getByText("PostgreSQL")).toBeInTheDocument();
 		expect(screen.getByText("MySQL")).toBeInTheDocument();
@@ -118,7 +118,6 @@ describe("SqlFormatterTool", () => {
 	it("changing dialect reprocesses output", () => {
 		renderWithProviders(<SqlFormatterTool />);
 		typeInput("SELECT * FROM users WHERE id=1");
-		const outputBefore = (getOutputEditor() as HTMLTextAreaElement).value;
 
 		act(() => {
 			fireEvent.change(screen.getByLabelText("SQL dialect"), {

@@ -17,8 +17,6 @@ import {
 	EyeOff,
 	ChevronRight,
 	ChevronDown,
-	FileText,
-	ClipboardCopy,
 	Key,
 } from "lucide-react";
 
@@ -29,20 +27,19 @@ type ViewMode = "flat" | "tree";
 function createDiffPatcher(arrayKeys: Record<string, string>): DiffPatcher {
 	const objectHash =
 		Object.keys(arrayKeys).length > 0
-			? (item: unknown, index: number) => {
+			? (item: object, index?: number) => {
 					if (typeof item === "object" && item !== null) {
 						const obj = item as Record<string, unknown>;
 						for (const key of Object.values(arrayKeys)) {
 							if (key in obj) return String(obj[key]);
 						}
 					}
-					return `$$index:${index}`;
+					return `$$index:${index ?? 0}`;
 				}
 			: undefined;
 
 	return create({
 		arrays: { detectMove: true, includeValueOnMove: true },
-		textDiff: { minLength: 60 },
 		objectHash,
 	});
 }

@@ -21,14 +21,6 @@ function typeLeft(value: string) {
 	});
 }
 
-function typeRight(value: string) {
-	const editors = screen.getAllByTestId("monaco-editor");
-	act(() => {
-		fireEvent.change(editors[1], { target: { value } });
-		vi.advanceTimersByTime(350);
-	});
-}
-
 function typeBoth(left: string, right: string) {
 	const editors = screen.getAllByTestId("monaco-editor");
 	act(() => {

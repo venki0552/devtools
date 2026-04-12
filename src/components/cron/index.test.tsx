@@ -153,6 +153,6 @@ describe("CronTool", () => {
 		// The 'Next 10 Runs' section only renders when nextRuns.length > 0
 		const nextRunsHeading = screen.queryByText("Next 10 Runs");
 		// If it still shows due to initial state, that's OK. Check no human readable
-		expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+		expect(nextRunsHeading).toBeFalsy();
 	});
 });

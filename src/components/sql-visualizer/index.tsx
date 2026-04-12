@@ -434,33 +434,6 @@ function FiltersPanel({ filters }: { filters: FilterInfo[] }) {
 	);
 }
 
-function ColumnsPanel({ columns }: { columns: OutputColumn[] }) {
-	if (columns.length === 0)
-		return <EmptyTab message='No output columns detected.' />;
-	return (
-		<div className='p-4'>
-			<table className='w-full text-xs'>
-				<thead>
-					<tr className='border-b border-border text-left text-muted-foreground'>
-						<th className='pb-2 pr-4 font-medium'>Column</th>
-						<th className='pb-2 pr-4 font-medium'>Source</th>
-						<th className='pb-2 font-medium'>Type (guessed)</th>
-					</tr>
-				</thead>
-				<tbody>
-					{columns.map((c, i) => (
-						<tr key={i} className='border-b border-border/50'>
-							<td className='py-1.5 pr-4 font-mono'>{c.name}</td>
-							<td className='py-1.5 pr-4 text-muted-foreground'>{c.source}</td>
-							<td className='py-1.5 text-muted-foreground'>{c.typeGuess}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	);
-}
-
 function IssuesPanel({ issues }: { issues: PotentialIssue[] }) {
 	if (issues.length === 0)
 		return (

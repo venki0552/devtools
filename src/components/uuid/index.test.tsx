@@ -1,5 +1,5 @@
 import "@/test/mock-monaco";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "@/test/utils";
 import { UuidTool } from "./index";
@@ -23,8 +23,6 @@ const UUID_V4_REGEX =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const UUID_V7_REGEX =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const UUID_ANY_REGEX =
-	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ULID_REGEX = /^[0-9A-HJKMNP-TV-Z]{26}$/i;
 
 describe("UuidTool", () => {
@@ -181,9 +179,9 @@ describe("UuidTool", () => {
 
 	it("regenerate button generates a new UUID", () => {
 		renderWithProviders(<UuidTool />);
-		const first = screen.getByText((content) =>
+		screen.getByText((content) =>
 			UUID_V4_REGEX.test(content),
-		).textContent;
+		);
 
 		fireEvent.click(screen.getByLabelText("Regenerate"));
 		const second = screen.getByText((content) =>
@@ -313,9 +311,9 @@ describe("UuidTool", () => {
 
 	it("Ctrl+Enter triggers regenerate", () => {
 		renderWithProviders(<UuidTool />);
-		const first = screen.getByText((content) =>
+		screen.getByText((content) =>
 			UUID_V4_REGEX.test(content),
-		).textContent;
+		);
 
 		fireEvent.keyDown(window, { key: "Enter", ctrlKey: true });
 

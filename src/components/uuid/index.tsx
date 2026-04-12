@@ -162,7 +162,6 @@ function decodeUuid(input: string): DecodeResult | null {
 		const date = new Date(unixMs);
 
 		const clockSeqHi = parseInt(clean[16], 16) & 0x3f;
-		const clockSeqLow = parseInt(clean.slice(17, 18), 16);
 		// Full clock seq from bytes 8-9 (positions 16-19 in hex)
 		const clockSeq =
 			((clockSeqHi << 8) | parseInt(clean.slice(18, 20), 16)) & 0x3fff;

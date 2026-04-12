@@ -1,7 +1,6 @@
 import "@/test/mock-monaco";
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { screen, fireEvent, within } from "@testing-library/react";
-import { act } from "react";
+import { screen, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "@/test/utils";
 import { EnvTool } from "./index";
 

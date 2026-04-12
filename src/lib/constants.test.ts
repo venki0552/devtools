@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { TOOLS, TOOL_CATEGORIES, getToolsByCategory, searchTools } from './constants'
-import type { ToolCategory } from './constants'
 
 describe('TOOLS', () => {
   it('contains 21 tools', () => {

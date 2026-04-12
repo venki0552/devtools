@@ -5,13 +5,13 @@ import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { useDebounce } from "@/lib/use-debounce";
 import { useHistory } from "@/lib/use-history";
-import { cn, formatBytes, formatDuration } from "@/lib/utils";
+import { cn, formatBytes } from "@/lib/utils";
 import { ToolPageHeader } from "@/components/shared/ToolPageHeader";
 import { CopyButton } from "@/components/shared/CopyButton";
 import { ErrorBox } from "@/components/shared/ErrorBox";
 import { StatsBar } from "@/components/shared/StatsBar";
 import { HistoryPanel } from "@/components/shared/HistoryPanel";
-import { smartParse, formatJson, minifyJson, sortKeysDeep } from "./parser";
+import { smartParse, formatJson, minifyJson } from "./parser";
 import { STRATEGY_LABELS } from "./types";
 import type { JsonPrefs } from "./types";
 import { MonacoWrapper } from "@/components/shared/MonacoWrapper";
@@ -659,17 +659,18 @@ export function JsonTool() {
 				/>
 			</div>
 
-			<HistoryPanel
-				open={showHistory}
-				onClose={() => setShowHistory(false)}
-				entries={entries}
-				onRestore={(value) => {
-					setInput(value);
-					setShowHistory(false);
-				}}
-				onRemove={removeEntry}
-				onClear={clearHistory}
-			/>
+			{showHistory && (
+				<HistoryPanel
+					onClose={() => setShowHistory(false)}
+					entries={entries}
+					onRestore={(value) => {
+						setInput(value);
+						setShowHistory(false);
+					}}
+					onRemove={removeEntry}
+					onClear={clearHistory}
+				/>
+			)}
 		</>
 	);
 }

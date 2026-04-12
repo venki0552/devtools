@@ -26,14 +26,6 @@ function typeOriginal(value: string) {
 	});
 }
 
-function typeModified(value: string) {
-	const { modified } = getEditors();
-	act(() => {
-		fireEvent.change(modified, { target: { value } });
-		vi.advanceTimersByTime(350);
-	});
-}
-
 function typeBoth(original: string, modified: string) {
 	const editors = getEditors();
 	act(() => {
@@ -357,8 +349,8 @@ describe("DiffTool", () => {
 			// Mock URL.createObjectURL and revokeObjectURL
 			const createObjectURL = vi.fn(() => "blob:test");
 			const revokeObjectURL = vi.fn();
-			global.URL.createObjectURL = createObjectURL;
-			global.URL.revokeObjectURL = revokeObjectURL;
+			globalThis.URL.createObjectURL = createObjectURL;
+			globalThis.URL.revokeObjectURL = revokeObjectURL;
 
 			renderWithProviders(<DiffTool />);
 			typeBoth("hello", "world");
