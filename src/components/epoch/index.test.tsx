@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, within } from "@testing-library/react";
 import { act } from "react";
 import { renderWithProviders } from "@/test/utils";
 import { EpochTool } from "./index";
@@ -54,8 +54,8 @@ describe("EpochTool", () => {
 		const expectedDay = DAYS[new Date(0).getDay()];
 		expect(screen.getByText(expectedDay)).toBeInTheDocument();
 		expect(
-			screen.getByText(new RegExp(String(new Date(0).getFullYear()))),
-		).toBeInTheDocument();
+			screen.getAllByText(new RegExp(String(new Date(0).getFullYear()))).length,
+		).toBeGreaterThanOrEqual(1);
 	});
 
 	it("Epoch→DateTime: 1000000000 detects as seconds", () => {
@@ -126,7 +126,8 @@ describe("EpochTool", () => {
 		const oneJan = new Date(d.getFullYear(), 0, 1);
 		const days = Math.floor((d.getTime() - oneJan.getTime()) / 86400000);
 		const expectedWeek = String(Math.ceil((days + oneJan.getDay() + 1) / 7));
-		expect(screen.getByText(expectedWeek)).toBeInTheDocument();
+		const weekRow = screen.getByText("Week Number").closest("div")!;
+		expect(within(weekRow).getByText(expectedWeek)).toBeInTheDocument();
 	});
 
 	it("handles negative epoch times (before 1970)", () => {
@@ -390,7 +391,8 @@ describe("EpochTool", () => {
 		const expectedDOY = String(
 			Math.floor((d.getTime() - start.getTime()) / 86400000),
 		);
-		expect(screen.getByText(expectedDOY)).toBeInTheDocument();
+		const doyRow = screen.getByText("Day of Year").closest("div")!;
+		expect(within(doyRow).getByText(expectedDOY)).toBeInTheDocument();
 	});
 
 	// 8. Epoch 0 handling

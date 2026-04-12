@@ -1,21 +1,11 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 import { ToolPageHeader } from "@/components/shared/ToolPageHeader";
-import {
-	Search,
-	Star,
-	X,
-	ChevronDown,
-	ChevronUp,
-	Copy,
-	Check,
-	Table,
-	LayoutGrid,
-} from "lucide-react";
+import { Search, Star, X, Copy, Check, Table, LayoutGrid } from "lucide-react";
 
 const tool = TOOLS.find((t) => t.id === "http-status")!;
 
@@ -977,7 +967,7 @@ function getFamily(code: number): Family {
 export function HttpStatusTool() {
 	const [search, setSearch] = useState("");
 	const [activeFilter, setActiveFilter] = useState<Family | null>(null);
-	const [expanded, setExpanded] = useState<number | null>(null);
+	const [selectedCode, setSelectedCode] = useState<number | null>(null);
 	const [favorites, setFavorites] = useLocalStorage<number[]>(
 		"devtools-http-status-prefs",
 		[],
@@ -985,6 +975,7 @@ export function HttpStatusTool() {
 	const [viewMode, setViewMode] = useState<"card" | "table">("card");
 	const [showUnofficial, setShowUnofficial] = useState(true);
 	const [copiedCode, setCopiedCode] = useState<number | null>(null);
+	const dialogRef = useRef<HTMLDialogElement>(null);
 
 	const toggleFavorite = useCallback(
 		(code: number) => {
@@ -1002,6 +993,29 @@ export function HttpStatusTool() {
 			setTimeout(() => setCopiedCode(null), 1500);
 		}
 	}, []);
+
+	const openDialog = useCallback((code: number) => {
+		setSelectedCode(code);
+	}, []);
+
+	const closeDialog = useCallback(() => {
+		setSelectedCode(null);
+	}, []);
+
+	useEffect(() => {
+		const dialog = dialogRef.current;
+		if (!dialog) return;
+		if (selectedCode !== null) {
+			if (!dialog.open) dialog.showModal?.();
+		} else {
+			if (dialog.open) dialog.close?.();
+		}
+	}, [selectedCode]);
+
+	const selectedStatus =
+		selectedCode !== null
+			? (STATUS_CODES.find((s) => s.code === selectedCode) ?? null)
+			: null;
 
 	const filteredCodes = useMemo(() => {
 		return STATUS_CODES.filter((s) => {
@@ -1120,19 +1134,17 @@ export function HttpStatusTool() {
 						<div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
 							{filteredCodes.map((s) => {
 								const style = getFamilyStyle(s.code);
-								const isExpanded = expanded === s.code;
 								const isFav = favorites.includes(s.code);
 
 								return (
 									<div
 										key={s.code}
 										className={cn(
-											"rounded-lg border p-4 transition-all cursor-pointer",
+											"rounded-lg border p-4 transition-all cursor-pointer hover:ring-1 hover:ring-accent/40",
 											style.border,
 											style.bg,
-											isExpanded && "col-span-1 sm:col-span-2",
 										)}
-										onClick={() => setExpanded(isExpanded ? null : s.code)}
+										onClick={() => openDialog(s.code)}
 									>
 										<div className='flex items-start justify-between'>
 											<div className='flex items-center gap-3'>
@@ -1160,140 +1172,26 @@ export function HttpStatusTool() {
 													</p>
 												</div>
 											</div>
-											<div className='flex items-center gap-1 shrink-0'>
-												<button
-													onClick={(e) => {
-														e.stopPropagation();
-														toggleFavorite(s.code);
-													}}
-													className='p-1 rounded hover:bg-white/10'
-													aria-label={
-														isFav ? "Remove from favorites" : "Add to favorites"
-													}
-												>
-													<Star
-														className={cn(
-															"h-3.5 w-3.5",
-															isFav
-																? "fill-amber-400 text-amber-400"
-																: "text-muted-foreground",
-														)}
-													/>
-												</button>
-												{isExpanded ? (
-													<ChevronUp className='h-4 w-4 text-muted-foreground' />
-												) : (
-													<ChevronDown className='h-4 w-4 text-muted-foreground' />
-												)}
-											</div>
+											<button
+												onClick={(e) => {
+													e.stopPropagation();
+													toggleFavorite(s.code);
+												}}
+												className='p-1 rounded hover:bg-white/10 shrink-0'
+												aria-label={
+													isFav ? "Remove from favorites" : "Add to favorites"
+												}
+											>
+												<Star
+													className={cn(
+														"h-3.5 w-3.5",
+														isFav
+															? "fill-amber-400 text-amber-400"
+															: "text-muted-foreground",
+													)}
+												/>
+											</button>
 										</div>
-
-										{isExpanded && (
-											<div className='mt-4 space-y-3 text-xs border-t border-border/50 pt-3'>
-												{/* Copy code button */}
-												<div className='flex justify-end'>
-													<button
-														onClick={(e) => {
-															e.stopPropagation();
-															handleCopyCode(s.code);
-														}}
-														className='flex items-center gap-1 rounded px-2 py-1 text-xs font-medium border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors'
-														aria-label='Copy code'
-													>
-														{copiedCode === s.code ? (
-															<>
-																<Check className='h-3 w-3 text-green-400' />{" "}
-																Copied
-															</>
-														) : (
-															<>
-																<Copy className='h-3 w-3' /> Copy code
-															</>
-														)}
-													</button>
-												</div>
-												<div>
-													<h4 className='font-semibold text-foreground mb-1'>
-														Details
-													</h4>
-													<p className='text-muted-foreground'>{s.detail}</p>
-												</div>
-												<div>
-													<h4 className='font-semibold text-foreground mb-1'>
-														Common Causes
-													</h4>
-													<ul className='list-disc pl-4 text-muted-foreground space-y-0.5'>
-														{s.causes.map((c, i) => (
-															<li key={i}>{c}</li>
-														))}
-													</ul>
-												</div>
-												<div>
-													<h4 className='font-semibold text-foreground mb-1'>
-														Client Action
-													</h4>
-													<p className='text-muted-foreground'>
-														{s.clientAction}
-													</p>
-												</div>
-												{s.headers && s.headers.length > 0 && (
-													<div>
-														<h4 className='font-semibold text-foreground mb-1'>
-															Associated Headers
-														</h4>
-														<div className='flex flex-wrap gap-1.5'>
-															{s.headers.map((h) => (
-																<span
-																	key={h}
-																	className='rounded px-2 py-0.5 text-xs font-mono font-medium bg-accent/30 text-foreground border border-border'
-																>
-																	{h}
-																</span>
-															))}
-														</div>
-													</div>
-												)}
-												{s.example && (
-													<div>
-														<h4 className='font-semibold text-foreground mb-1'>
-															Example
-														</h4>
-														<code className='block rounded bg-black/20 px-2 py-1.5 text-xs font-mono text-muted-foreground whitespace-pre-wrap'>
-															{s.example}
-														</code>
-													</div>
-												)}
-												{s.related.length > 0 && (
-													<div>
-														<h4 className='font-semibold text-foreground mb-1'>
-															Related Codes
-														</h4>
-														<div className='flex flex-wrap gap-1.5'>
-															{s.related.map((r) => {
-																const rs = getFamilyStyle(r);
-																return (
-																	<button
-																		key={r}
-																		onClick={(e) => {
-																			e.stopPropagation();
-																			setExpanded(r);
-																		}}
-																		className={cn(
-																			"rounded px-2 py-0.5 text-xs font-mono font-medium border",
-																			rs.border,
-																			rs.bg,
-																			rs.color,
-																		)}
-																	>
-																		{r}
-																	</button>
-																);
-															})}
-														</div>
-													</div>
-												)}
-											</div>
-										)}
 									</div>
 								);
 							})}
@@ -1326,7 +1224,8 @@ export function HttpStatusTool() {
 										return (
 											<tr
 												key={s.code}
-												className='border-b border-border/50 hover:bg-accent/5 transition-colors'
+												className='border-b border-border/50 hover:bg-accent/5 transition-colors cursor-pointer'
+												onClick={() => openDialog(s.code)}
 											>
 												<td className='px-3 py-2'>
 													<span
@@ -1360,7 +1259,10 @@ export function HttpStatusTool() {
 												</td>
 												<td className='px-3 py-2'>
 													<button
-														onClick={() => toggleFavorite(s.code)}
+														onClick={(e) => {
+															e.stopPropagation();
+															toggleFavorite(s.code);
+														}}
 														className='p-1 rounded hover:bg-white/10'
 														aria-label={
 															isFav
@@ -1393,6 +1295,184 @@ export function HttpStatusTool() {
 					)}
 				</div>
 			</div>
+
+			{/* Status code detail dialog */}
+			<dialog
+				ref={dialogRef}
+				onClose={closeDialog}
+				onClick={(e) => {
+					if (e.target === e.currentTarget) closeDialog();
+				}}
+				className='backdrop:bg-black/60 bg-transparent p-0 m-auto max-w-lg w-[calc(100%-2rem)] rounded-xl outline-none open:animate-in open:fade-in-0 open:zoom-in-95'
+			>
+				{selectedStatus &&
+					(() => {
+						const s = selectedStatus;
+						const style = getFamilyStyle(s.code);
+						const isFav = favorites.includes(s.code);
+						return (
+							<div
+								className={cn(
+									"rounded-xl border p-5 shadow-2xl",
+									style.border,
+									style.bg,
+									"bg-panel",
+								)}
+							>
+								{/* Header */}
+								<div className='flex items-start justify-between mb-4'>
+									<div className='flex items-center gap-3'>
+										<span
+											className={cn(
+												"text-3xl font-bold font-mono",
+												style.color,
+											)}
+										>
+											{s.code}
+										</span>
+										<div>
+											<div className='flex items-center gap-2'>
+												<h2 className='text-base font-semibold text-foreground'>
+													{s.name}
+												</h2>
+												{s.unofficial && (
+													<span className='rounded-full bg-purple-500/20 px-1.5 py-0.5 text-[10px] font-medium text-purple-400 border border-purple-500/30'>
+														unofficial
+													</span>
+												)}
+											</div>
+											<p className='text-xs text-muted-foreground mt-0.5'>
+												{s.description}
+											</p>
+										</div>
+									</div>
+									<div className='flex items-center gap-1 shrink-0'>
+										<button
+											onClick={() => toggleFavorite(s.code)}
+											className='p-1 rounded hover:bg-white/10'
+											aria-label={
+												isFav ? "Remove from favorites" : "Add to favorites"
+											}
+										>
+											<Star
+												className={cn(
+													"h-4 w-4",
+													isFav
+														? "fill-amber-400 text-amber-400"
+														: "text-muted-foreground",
+												)}
+											/>
+										</button>
+										<button
+											onClick={closeDialog}
+											className='p-1 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground'
+											aria-label='Close dialog'
+										>
+											<X className='h-4 w-4' />
+										</button>
+									</div>
+								</div>
+
+								{/* Body */}
+								<div className='space-y-3 text-xs border-t border-border/50 pt-3 max-h-[60vh] overflow-y-auto'>
+									{/* Copy code button */}
+									<div className='flex justify-end'>
+										<button
+											onClick={() => handleCopyCode(s.code)}
+											className='flex items-center gap-1 rounded px-2 py-1 text-xs font-medium border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors'
+											aria-label='Copy code'
+										>
+											{copiedCode === s.code ? (
+												<>
+													<Check className='h-3 w-3 text-green-400' /> Copied
+												</>
+											) : (
+												<>
+													<Copy className='h-3 w-3' /> Copy code
+												</>
+											)}
+										</button>
+									</div>
+									<div>
+										<h4 className='font-semibold text-foreground mb-1'>
+											Details
+										</h4>
+										<p className='text-muted-foreground'>{s.detail}</p>
+									</div>
+									<div>
+										<h4 className='font-semibold text-foreground mb-1'>
+											Common Causes
+										</h4>
+										<ul className='list-disc pl-4 text-muted-foreground space-y-0.5'>
+											{s.causes.map((c, i) => (
+												<li key={i}>{c}</li>
+											))}
+										</ul>
+									</div>
+									<div>
+										<h4 className='font-semibold text-foreground mb-1'>
+											Client Action
+										</h4>
+										<p className='text-muted-foreground'>{s.clientAction}</p>
+									</div>
+									{s.headers && s.headers.length > 0 && (
+										<div>
+											<h4 className='font-semibold text-foreground mb-1'>
+												Associated Headers
+											</h4>
+											<div className='flex flex-wrap gap-1.5'>
+												{s.headers.map((h) => (
+													<span
+														key={h}
+														className='rounded px-2 py-0.5 text-xs font-mono font-medium bg-accent/30 text-foreground border border-border'
+													>
+														{h}
+													</span>
+												))}
+											</div>
+										</div>
+									)}
+									{s.example && (
+										<div>
+											<h4 className='font-semibold text-foreground mb-1'>
+												Example
+											</h4>
+											<code className='block rounded bg-black/20 px-2 py-1.5 text-xs font-mono text-muted-foreground whitespace-pre-wrap'>
+												{s.example}
+											</code>
+										</div>
+									)}
+									{s.related.length > 0 && (
+										<div>
+											<h4 className='font-semibold text-foreground mb-1'>
+												Related Codes
+											</h4>
+											<div className='flex flex-wrap gap-1.5'>
+												{s.related.map((r) => {
+													const rs = getFamilyStyle(r);
+													return (
+														<button
+															key={r}
+															onClick={() => openDialog(r)}
+															className={cn(
+																"rounded px-2 py-0.5 text-xs font-mono font-medium border",
+																rs.border,
+																rs.bg,
+																rs.color,
+															)}
+														>
+															{r}
+														</button>
+													);
+												})}
+											</div>
+										</div>
+									)}
+								</div>
+							</div>
+						);
+					})()}
+			</dialog>
 		</>
 	);
 }
