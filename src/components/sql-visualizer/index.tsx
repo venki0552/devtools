@@ -1,5 +1,5 @@
 import { useState, useCallback, useId } from "react";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import {
 	Database,
 	AlertTriangle,
@@ -998,10 +998,7 @@ export function SqlVisualizerTool() {
 
 	return (
 		<>
-			<Helmet>
-				<title>{`${tool.name} | DevTools`}</title>
-				<meta name='description' content={tool.description} />
-			</Helmet>
+			<SEOHead tool={tool} />
 
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>

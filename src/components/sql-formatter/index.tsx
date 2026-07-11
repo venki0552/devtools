@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { format } from "sql-formatter";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -234,10 +234,7 @@ export function SqlFormatterTool() {
 
 	return (
 		<>
-			<Helmet>
-				<title>{`${tool.name} | DevTools`}</title>
-				<meta name='description' content={tool.description} />
-			</Helmet>
+			<SEOHead tool={tool} />
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>
 					<button

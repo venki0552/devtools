@@ -1,6 +1,8 @@
 # DevTools — Complete Tool Documentation
 
-> A suite of 21+ free, privacy-first developer tools built with React and TypeScript. All processing happens client-side in your browser.
+> A suite of 21 free, open-source, privacy-first developer tools at https://devtls.vercel.app, built with React and TypeScript. All processing happens client-side in your browser — no signup, no tracking, no data ever sent to a server. Source: https://github.com/venki0552/devtools (MIT license). Tool index: https://devtls.vercel.app/llms.txt
+
+Each tool below lives at https://devtls.vercel.app followed by its route (e.g. /json → https://devtls.vercel.app/json).
 
 ## JSON Parser & Formatter (/json)
 Intelligent JSON parser that handles: valid JSON, single-quoted JSON, trailing commas, unquoted keys, JS object literals, URL-encoded JSON, Base64-encoded JSON, backtick-wrapped JSON, JSON with comments, escaped JSON strings. Formats with configurable indentation (2/4/tab), key sorting, minification. Includes collapsible tree view with type badges, search, and clipboard support.
@@ -33,7 +35,7 @@ Encode/decode URLs with component, full URL, and form encoding modes. Query stri
 Generate MD5, SHA-1, SHA-256, SHA-384, SHA-512 hashes using Web Crypto API. Text and file input modes. Live hashing with debounce. Hash comparison mode for integrity verification. Output in hex or Base64.
 
 ## Regex Tester (/regex)
-Test regex patterns with live match highlighting in Monaco editor. Capture group inspection. Replace mode with $1/$2 substitution. Common pattern library. Catastrophic backtracking detection via Web Worker timeout.
+Test regex patterns with live match highlighting in Monaco editor. Capture group inspection. Replace mode with $1/$2 substitution. Common pattern library. Catastrophic backtracking detection via Web Worker timeout. Optional AI pattern explanation (bring your own Anthropic API key).
 
 ## CRON Builder (/cron)
 Visual cron expression builder with cell grids for each field. Human-readable translation via cronstrue. Next 10 run times with timezone conversion. Supports 5-field standard, 6-field Quartz, and AWS EventBridge formats.
@@ -60,10 +62,10 @@ Deep diff two JSON objects using jsondiffpatch. Tree view with added/removed/cha
 Compare two texts with unified or side-by-side diff using jsdiff. Word, line, character, and sentence diff algorithms. Ignore whitespace/case options. Configurable context lines. Export as unified diff or .patch file.
 
 ## SQL Visualizer (/sql-visualizer)
-AI-powered SQL analysis using Anthropic API. Generates: plain English summary, table/join graph (SVG), Venn diagrams per JOIN, data flow stepper, output shape table, filter/grouping analysis, potential performance issues.
+Client-side SQL analysis using node-sql-parser — no API calls. Generates: plain English summary, table/join graph (SVG), Venn diagrams per JOIN, data flow stepper, output shape table, filter/grouping analysis, potential performance issues.
 
 ## Mock API Generator (/mock-api)
-Generate realistic mock data from JSON Schema, example JSON, or plain English descriptions using Anthropic API. Locale-aware (US/UK/DE/FR/JP/IN). Export as JSON, NDJSON, CSV. Copy as fetch mock or MSW handler.
+Generate realistic mock data from JSON Schema, example JSON, or plain English descriptions — entirely in the browser using Faker. Locale-aware (US/UK/DE/FR/JP/IN). Export as JSON, NDJSON, CSV. Copy as fetch mock or MSW handler.
 
 ## Privacy & Security
-All tools process data entirely in your browser using client-side JavaScript. No data is transmitted to any server except when explicitly using AI-powered tools (SQL Visualizer, Mock API Generator), which connect directly to the Anthropic API using your own API key stored in localStorage.
+All tools process data entirely in your browser using client-side JavaScript. No data is transmitted to any server. The only exception is the optional "Explain" tab in the Regex Tester: if (and only if) you provide your own Anthropic API key, the regex pattern is sent directly from your browser to the Anthropic API. The key is stored in localStorage and never touches any other server.

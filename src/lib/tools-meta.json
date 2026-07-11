@@ -1,0 +1,182 @@
+{
+	"site": {
+		"url": "https://devtls.vercel.app",
+		"name": "DevTools",
+		"title": "DevTools — Free Online Developer Utilities",
+		"description": "21+ free, open-source developer tools that run entirely in your browser: JSON formatter, SQL formatter & visualizer, Base64 encoder, JWT decoder, regex tester, UUID generator, and more. No signup, no tracking — your data never leaves your machine.",
+		"ogImage": "/og.png",
+		"repository": "https://github.com/venki0552/devtools",
+		"author": "venki0552",
+		"license": "MIT"
+	},
+	"tools": [
+		{
+			"id": "json",
+			"name": "JSON Parser & Formatter",
+			"description": "Parse, format, minify, and explore JSON with intelligent auto-fix for malformed input.",
+			"route": "/json",
+			"category": "Formatters",
+			"keywords": ["json", "format", "parse", "minify", "prettify", "validate", "tree"]
+		},
+		{
+			"id": "xml",
+			"name": "XML Formatter",
+			"description": "Format, validate, and explore XML documents with structure analysis.",
+			"route": "/xml",
+			"category": "Formatters",
+			"keywords": ["xml", "format", "validate", "html", "structure"]
+		},
+		{
+			"id": "sql-formatter",
+			"name": "SQL Formatter",
+			"description": "Format and beautify SQL queries with dialect-aware indentation.",
+			"route": "/sql-formatter",
+			"category": "Formatters",
+			"keywords": ["sql", "format", "query", "beautify", "indent", "postgresql", "mysql"]
+		},
+		{
+			"id": "graphql",
+			"name": "GraphQL Formatter",
+			"description": "Format GraphQL queries and explore SDL schemas with type inspection.",
+			"route": "/graphql",
+			"category": "Formatters",
+			"keywords": ["graphql", "format", "schema", "query", "mutation", "sdl"]
+		},
+		{
+			"id": "csv-json",
+			"name": "CSV ↔ JSON",
+			"description": "Convert between CSV and JSON with smart delimiter detection and type inference.",
+			"route": "/csv-json",
+			"category": "Converters",
+			"keywords": ["csv", "json", "convert", "table", "spreadsheet", "delimiter"]
+		},
+		{
+			"id": "yaml-json",
+			"name": "YAML ↔ JSON",
+			"description": "Convert between YAML and JSON with round-trip validation and anchor resolution.",
+			"route": "/yaml-json",
+			"category": "Converters",
+			"keywords": ["yaml", "json", "convert", "kubernetes", "config", "helm"]
+		},
+		{
+			"id": "base64",
+			"name": "Base64 Encode / Decode",
+			"description": "Encode and decode Base64 for text and files with auto-detection.",
+			"route": "/base64",
+			"category": "Encoders & Decoders",
+			"keywords": ["base64", "encode", "decode", "binary", "data-uri", "file"]
+		},
+		{
+			"id": "jwt",
+			"name": "JWT Decoder",
+			"description": "Decode and inspect JSON Web Tokens with claim analysis and expiry checking.",
+			"route": "/jwt",
+			"category": "Encoders & Decoders",
+			"keywords": ["jwt", "token", "decode", "claims", "auth", "bearer"]
+		},
+		{
+			"id": "url",
+			"name": "URL Encode / Decode",
+			"description": "Encode, decode, and parse URLs with query string inspection and builder.",
+			"route": "/url",
+			"category": "Encoders & Decoders",
+			"keywords": ["url", "encode", "decode", "query", "parameter", "uri"]
+		},
+		{
+			"id": "hash",
+			"name": "Hash Generator",
+			"description": "Generate MD5, SHA-1, SHA-256, SHA-384, SHA-512 hashes for text and files.",
+			"route": "/hash",
+			"category": "Encoders & Decoders",
+			"keywords": ["hash", "md5", "sha", "sha256", "checksum", "digest"]
+		},
+		{
+			"id": "regex",
+			"name": "Regex Tester",
+			"description": "Test regular expressions with live highlighting, group capture, and pattern library.",
+			"route": "/regex",
+			"category": "Generators & Inspectors",
+			"keywords": ["regex", "regular expression", "pattern", "match", "replace", "test"]
+		},
+		{
+			"id": "cron",
+			"name": "CRON Builder",
+			"description": "Build and decode cron expressions with visual editor and next-run preview.",
+			"route": "/cron",
+			"category": "Generators & Inspectors",
+			"keywords": ["cron", "schedule", "crontab", "timer", "job", "recurring"]
+		},
+		{
+			"id": "http-status",
+			"name": "HTTP Status Codes",
+			"description": "Quick reference for all HTTP status codes with descriptions and common causes.",
+			"route": "/http-status",
+			"category": "Generators & Inspectors",
+			"keywords": ["http", "status", "code", "404", "500", "200", "response", "api"]
+		},
+		{
+			"id": "epoch",
+			"name": "Epoch Converter",
+			"description": "Convert between Unix timestamps and human-readable dates across timezones.",
+			"route": "/epoch",
+			"category": "Generators & Inspectors",
+			"keywords": ["epoch", "timestamp", "unix", "date", "time", "timezone", "utc"]
+		},
+		{
+			"id": "uuid",
+			"name": "UUID Generator",
+			"description": "Generate UUIDv4, UUIDv7, and ULID with bulk generation and format options.",
+			"route": "/uuid",
+			"category": "Generators & Inspectors",
+			"keywords": ["uuid", "guid", "ulid", "generate", "unique", "identifier"]
+		},
+		{
+			"id": "color",
+			"name": "Color Converter",
+			"description": "Convert between color formats (HEX, RGB, HSL, Lab, Oklch) with palette generator.",
+			"route": "/color",
+			"category": "Generators & Inspectors",
+			"keywords": ["color", "hex", "rgb", "hsl", "palette", "contrast", "wcag"]
+		},
+		{
+			"id": "env",
+			"name": "Env Var Manager",
+			"description": "Manage environment variables across projects with import, export, and comparison.",
+			"route": "/env",
+			"category": "Generators & Inspectors",
+			"keywords": ["env", "environment", "variable", "dotenv", "config", "secret"]
+		},
+		{
+			"id": "json-diff",
+			"name": "JSON Diff",
+			"description": "Deep diff two JSON objects with tree visualization and JSON Patch output.",
+			"route": "/json-diff",
+			"category": "Viewers & Comparators",
+			"keywords": ["json", "diff", "compare", "difference", "patch", "merge"]
+		},
+		{
+			"id": "diff",
+			"name": "Text Diff",
+			"description": "Compare two text files with unified or side-by-side diff view.",
+			"route": "/diff",
+			"category": "Viewers & Comparators",
+			"keywords": ["diff", "compare", "text", "merge", "patch", "unified"]
+		},
+		{
+			"id": "sql-visualizer",
+			"name": "SQL Visualizer",
+			"description": "Client-side SQL analysis with join graphs, data flow diagrams, and plain-English explanations.",
+			"route": "/sql-visualizer",
+			"category": "Generators & Inspectors",
+			"keywords": ["sql", "visualize", "join", "explain", "diagram", "analyze"]
+		},
+		{
+			"id": "mock-api",
+			"name": "Mock API Generator",
+			"description": "Generate realistic mock API responses from schemas or descriptions.",
+			"route": "/mock-api",
+			"category": "Generators & Inspectors",
+			"keywords": ["mock", "api", "fake", "data", "generate", "schema", "faker"]
+		}
+	]
+}

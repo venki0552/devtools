@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { Download, Upload } from "lucide-react";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -566,10 +566,7 @@ export function CsvJsonTool() {
 
 	return (
 		<>
-			<Helmet>
-				<title>{`${tool.name} | DevTools`}</title>
-				<meta name='description' content={tool.description} />
-			</Helmet>
+			<SEOHead tool={tool} />
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>
 					<div className='flex rounded-md border border-border overflow-hidden'>

@@ -55,10 +55,10 @@ Every developer constantly reaches for small utilities — formatting JSON, deco
 
 | Tool                  | Route             | Description                                                                                                                                                                                          |
 | --------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **SQL Visualizer**    | `/sql-visualizer` | AI-powered SQL analysis (Claude). Generates plain-English summary, JOIN graph SVG, Venn diagrams, data flow stepper, output shape prediction, and performance warnings.                              |
+| **SQL Visualizer**    | `/sql-visualizer` | Client-side SQL analysis (node-sql-parser). Generates plain-English summary, JOIN graph SVG, Venn diagrams, data flow stepper, output shape prediction, and performance warnings.                    |
 | **JSON Diff Viewer**  | `/json-diff`      | Deep JSON diffing with tree and flat views, show/hide unchanged nodes, match percentage, copy as RFC 6902 JSON Patch, and array identity key matching.                                               |
 | **Text Diff Viewer**  | `/diff`           | Unified and side-by-side diff modes with synchronized scroll, context line control, character-level inner diffs, similarity percentage, and .patch file download.                                    |
-| **Regex Tester**      | `/regex`          | Live match highlighting, capture group extraction, replace mode with backreferences, AI-powered pattern explanation, catastrophic backtracking detection via Web Worker, and common pattern library. |
+| **Regex Tester**      | `/regex`          | Live match highlighting, capture group extraction, replace mode with backreferences, optional AI pattern explanation (BYO API key), catastrophic backtracking detection, and common pattern library. |
 | **HTTP Status Codes** | `/http-status`    | Complete reference for all HTTP status codes including unofficial (nginx, Cloudflare). Card and table views, search, favorites, associated headers, and code examples.                               |
 
 ### Generators & Decoders
@@ -70,7 +70,7 @@ Every developer constantly reaches for small utilities — formatting JSON, deco
 | **UUID Generator**     | `/uuid`     | Generate v4, v7, and ULID identifiers. Bulk generation up to 1,000 with multiple output formats (JSON, SQL VALUES, etc.). UUID decoder with v1 timestamp extraction.                                                  |
 | **CRON Builder**       | `/cron`     | Visual grid builders for each cron field, Standard/Quartz/AWS formats, timezone-aware next-run previews, run frequency statistics, and date-specific warnings.                                                        |
 | **Epoch Converter**    | `/epoch`    | Live clock, bidirectional epoch↔datetime conversion with flexible parsing (ISO, US, European, relative), timezone comparator for up to 5 timezones with DST detection.                                                |
-| **Mock API Generator** | `/mock-api` | AI-powered mock data generation from JSON Schema, example JSON, or plain English descriptions. Multiple output formats, locale support, and copy as fetch mock or MSW handler.                                        |
+| **Mock API Generator** | `/mock-api` | Client-side mock data generation (Faker) from JSON Schema, example JSON, or plain English descriptions. Multiple output formats, locale support, and copy as fetch mock or MSW handler.                               |
 | **Env Var Manager**    | `/env`      | Multi-project environment variable management with masked values, import (.env, JSON, YAML, shell exports), 7 export formats (including Docker, K8s Secret, GitHub Actions), group filtering, and project comparison. |
 
 ---
@@ -194,7 +194,7 @@ devtools/
 │   │   ├── json/                 # JSON Parser & Formatter
 │   │   ├── xml/                  # XML Formatter
 │   │   ├── sql-formatter/        # SQL Formatter
-│   │   ├── sql-visualizer/       # SQL Visualizer (AI)
+│   │   ├── sql-visualizer/       # SQL Visualizer
 │   │   ├── csv-json/             # CSV ↔ JSON
 │   │   ├── yaml-json/            # YAML ↔ JSON
 │   │   ├── json-diff/            # JSON Diff Viewer
@@ -205,7 +205,7 @@ devtools/
 │   │   ├── regex/                # Regex Tester
 │   │   ├── cron/                 # CRON Builder
 │   │   ├── http-status/          # HTTP Status Codes
-│   │   ├── mock-api/             # Mock API Generator (AI)
+│   │   ├── mock-api/             # Mock API Generator
 │   │   ├── epoch/                # Epoch Converter
 │   │   ├── uuid/                 # UUID Generator
 │   │   ├── color/                # Color Converter
@@ -233,22 +233,20 @@ devtools/
 - **All processing happens in your browser** — nothing is sent to any server
 - **No analytics, no cookies, no tracking**
 - Data is stored in `localStorage` only — clearing your browser data removes everything
-- The only external API calls are to Anthropic (for SQL Visualizer and Mock API Generator) when you explicitly provide your own API key
+- The only external API call is the optional Regex Tester "Explain" tab, which goes directly to Anthropic when you explicitly provide your own API key
 - API keys are stored in your browser's `localStorage` and never logged or transmitted elsewhere
 
 ---
 
-## AI-Powered Tools
+## AI Features
 
-Two tools use the Anthropic API (Claude) for AI features:
+One tool has an optional AI feature powered by the Anthropic API (Claude):
 
-| Tool                   | Feature                                           | Required?                 |
-| ---------------------- | ------------------------------------------------- | ------------------------- |
-| **SQL Visualizer**     | Query analysis, plain-English summary, data flow  | Yes — core feature        |
-| **Mock API Generator** | Realistic data generation from schema/description | Yes — core feature        |
-| **Regex Tester**       | Pattern explanation (Explain tab)                 | No — optional enhancement |
+| Tool             | Feature                           | Required?                 |
+| ---------------- | --------------------------------- | ------------------------- |
+| **Regex Tester** | Pattern explanation (Explain tab) | No — optional enhancement |
 
-To use these, you need an [Anthropic API key](https://console.anthropic.com/). The key is stored locally in your browser and calls go directly from your browser to the Anthropic API.
+Everything else — including the SQL Visualizer and Mock API Generator — runs 100% client-side with no API calls. To use the Explain tab, you need an [Anthropic API key](https://console.anthropic.com/). The key is stored locally in your browser and calls go directly from your browser to the Anthropic API.
 
 ---
 
@@ -295,7 +293,7 @@ You are free to use, modify, and distribute this software for any purpose, comme
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/) for the code editing experience
 - [Tailwind CSS](https://tailwindcss.com/) for the styling system
 - [Lucide](https://lucide.dev/) for the icon set
-- [Anthropic](https://anthropic.com/) for AI capabilities in SQL Visualizer and Mock API Generator
+- [Anthropic](https://anthropic.com/) for the optional AI regex explanation feature
 - All the open source packages that make this project possible
 
 ---

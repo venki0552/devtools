@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { Plus, Trash2 } from "lucide-react";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -602,10 +602,7 @@ export function UrlTool() {
 
 	return (
 		<>
-			<Helmet>
-				<title>{`${tool.name} | DevTools`}</title>
-				<meta name='description' content={tool.description} />
-			</Helmet>
+			<SEOHead tool={tool} />
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>
 					{/* Mode tabs */}

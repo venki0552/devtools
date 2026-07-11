@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
 import {
 	TOOL_CATEGORIES,
 	getToolsByCategory,
@@ -19,17 +19,7 @@ function HomePage() {
 
 	return (
 		<>
-			<Helmet>
-				<title>DevTools — Free Online Developer Utilities</title>
-				<meta
-					name='description'
-					content='A collection of 21+ free, client-side developer tools: JSON formatter, SQL visualizer, Base64 encoder, JWT decoder, regex tester, and more. All data stays in your browser.'
-				/>
-				<meta
-					name='keywords'
-					content='developer tools, json formatter, sql formatter, base64, jwt decoder, regex tester, url encoder, hash generator, uuid generator, color converter'
-				/>
-			</Helmet>
+			<SEOHead />
 
 			<div className='mx-auto max-w-5xl px-6 py-8'>
 				{/* Hero section — static HTML for crawlers */}

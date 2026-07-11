@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/venki0552/devtools.git"
   },
-  "homepage": "https://github.com/venki0552/devtools#readme",
+  "homepage": "https://devtls.vercel.app",
   "engines": {
     "node": ">=20.12.0"
   },
@@ -38,7 +38,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/postbuild-seo.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",

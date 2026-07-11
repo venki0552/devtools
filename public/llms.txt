@@ -1,31 +1,50 @@
 # DevTools — Free Online Developer Utilities
 
-> A suite of 21+ free, privacy-first developer tools. All processing happens client-side — no data is ever sent to a server.
+> A suite of 21 free, open-source, privacy-first developer tools at https://devtls.vercel.app. All processing happens client-side in your browser — no data is ever sent to a server, no signup, no tracking. MIT licensed; source at https://github.com/venki0552/devtools.
 
-## Tools
+Detailed per-tool documentation: https://devtls.vercel.app/llms-full.txt
 
-- /json — JSON Parser & Formatter: Parse, format, minify, and explore JSON with intelligent auto-fix for malformed input.
-- /xml — XML Formatter: Format, validate, and explore XML documents with structure analysis.
-- /sql-formatter — SQL Formatter: Format and beautify SQL queries with dialect-aware indentation.
-- /graphql — GraphQL Formatter: Format GraphQL queries and explore SDL schemas with type inspection.
-- /csv-json — CSV ↔ JSON Converter: Convert between CSV and JSON with smart delimiter detection and type inference.
-- /yaml-json — YAML ↔ JSON Converter: Convert between YAML and JSON with round-trip validation and anchor resolution.
-- /base64 — Base64 Encode/Decode: Encode and decode Base64 for text and files with auto-detection.
-- /jwt — JWT Decoder: Decode and inspect JSON Web Tokens with claim analysis and expiry checking.
-- /url — URL Encode/Decode: Encode, decode, and parse URLs with query string inspection and builder.
-- /hash — Hash Generator: Generate MD5, SHA-1, SHA-256, SHA-384, SHA-512 hashes for text and files.
-- /regex — Regex Tester: Test regular expressions with live highlighting, group capture, and pattern library.
-- /cron — CRON Builder: Build and decode cron expressions with visual editor and next-run preview.
-- /http-status — HTTP Status Codes: Quick reference for all HTTP status codes with descriptions and common causes.
-- /epoch — Epoch Converter: Convert between Unix timestamps and human-readable dates across timezones.
-- /uuid — UUID Generator: Generate UUIDv4, UUIDv7, and ULID with bulk generation and format options.
-- /color — Color Converter: Convert between color formats (HEX, RGB, HSL, Lab, Oklch) with palette generator and contrast checker.
-- /env — Env Var Manager: Manage environment variables across projects with import, export, and comparison.
-- /json-diff — JSON Diff Viewer: Deep diff two JSON objects with tree visualization and JSON Patch output.
-- /diff — Text Diff Viewer: Compare two text files with unified or side-by-side diff view.
-- /sql-visualizer — SQL Visualizer: AI-powered SQL analysis with join graphs, data flow diagrams, and plain-English explanations.
-- /mock-api — Mock API Generator: Generate realistic mock API responses from schemas or descriptions using AI.
+## Formatters
+
+- [JSON Parser & Formatter](https://devtls.vercel.app/json): Parse, format, minify, and explore JSON with intelligent auto-fix for malformed input.
+- [XML Formatter](https://devtls.vercel.app/xml): Format, validate, and explore XML documents with structure analysis.
+- [SQL Formatter](https://devtls.vercel.app/sql-formatter): Format and beautify SQL queries with dialect-aware indentation (PostgreSQL, MySQL, SQLite, SQL Server, BigQuery).
+- [GraphQL Formatter](https://devtls.vercel.app/graphql): Format GraphQL queries and explore SDL schemas with type inspection.
+
+## Converters
+
+- [CSV ↔ JSON Converter](https://devtls.vercel.app/csv-json): Convert between CSV and JSON with smart delimiter detection and type inference.
+- [YAML ↔ JSON Converter](https://devtls.vercel.app/yaml-json): Convert between YAML and JSON with round-trip validation and anchor resolution.
+
+## Encoders & Decoders
+
+- [Base64 Encode/Decode](https://devtls.vercel.app/base64): Encode and decode Base64 for text and files with auto-detection.
+- [JWT Decoder](https://devtls.vercel.app/jwt): Decode and inspect JSON Web Tokens with claim analysis and expiry checking.
+- [URL Encode/Decode](https://devtls.vercel.app/url): Encode, decode, and parse URLs with query string inspection and builder.
+- [Hash Generator](https://devtls.vercel.app/hash): Generate MD5, SHA-1, SHA-256, SHA-384, SHA-512 hashes for text and files.
+
+## Generators & Inspectors
+
+- [Regex Tester](https://devtls.vercel.app/regex): Test regular expressions with live highlighting, group capture, and pattern library.
+- [CRON Builder](https://devtls.vercel.app/cron): Build and decode cron expressions with visual editor and next-run preview.
+- [HTTP Status Codes](https://devtls.vercel.app/http-status): Quick reference for all HTTP status codes with descriptions and common causes.
+- [Epoch Converter](https://devtls.vercel.app/epoch): Convert between Unix timestamps and human-readable dates across timezones.
+- [UUID Generator](https://devtls.vercel.app/uuid): Generate UUIDv4, UUIDv7, and ULID with bulk generation and format options.
+- [Color Converter](https://devtls.vercel.app/color): Convert between color formats (HEX, RGB, HSL, Lab, Oklch) with palette generator and WCAG contrast checker.
+- [Env Var Manager](https://devtls.vercel.app/env): Manage environment variables across projects with import, export, and comparison.
+- [SQL Visualizer](https://devtls.vercel.app/sql-visualizer): Client-side SQL analysis with join graphs, data flow diagrams, and plain-English explanations.
+- [Mock API Generator](https://devtls.vercel.app/mock-api): Generate realistic mock API responses from JSON Schema or example JSON, entirely in the browser.
+
+## Viewers & Comparators
+
+- [JSON Diff Viewer](https://devtls.vercel.app/json-diff): Deep diff two JSON objects with tree visualization and JSON Patch output.
+- [Text Diff Viewer](https://devtls.vercel.app/diff): Compare two texts with unified or side-by-side diff view.
 
 ## Privacy
 
-All data processing happens entirely in your browser. No data is transmitted to any server. Tools that use AI (SQL Visualizer, Mock API Generator) connect directly to the Anthropic API using your own API key.
+All tools process data entirely in the browser using client-side JavaScript — nothing is transmitted to any server. The only exception is the optional "Explain" feature in the Regex Tester, which (only if the user provides their own Anthropic API key) sends the regex pattern directly from the browser to the Anthropic API.
+
+## Optional
+
+- [Source code](https://github.com/venki0552/devtools): MIT-licensed GitHub repository (React 19, TypeScript, Vite).
+- [Report an issue](https://github.com/venki0552/devtools/issues): Bug reports and feature requests.

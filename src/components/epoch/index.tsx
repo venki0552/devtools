@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { TOOLS } from "@/lib/constants";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { cn } from "@/lib/utils";
@@ -550,10 +550,7 @@ export function EpochTool() {
 
 	return (
 		<>
-			<Helmet>
-				<title>{`${tool.name} | DevTools`}</title>
-				<meta name='description' content={tool.description} />
-			</Helmet>
+			<SEOHead tool={tool} />
 			<div className='flex h-full flex-col'>
 				<ToolPageHeader title={tool.name}>
 					<button
